@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | Desarrollo Sustentable</title>
+    <!-- Aquí conectamos el diseño CSS -->
+    <link rel="stylesheet" href="estilos.css"> 
+</head>
+<body>
+    <header>
+        <h1>Desarrollo Sustentable</h1>
+        <p>Un equilibrio vital entre la sociedad, la economía y nuestro planeta.</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html" class="activo">Inicio (Concepto)</a></li>
+            <li><a href="dimensiones.html">Dimensiones</a></li>
+            <li><a href="principios.html">Principios</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>¿Qué es exactamente?</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem;">
+                El desarrollo sustentable es el modelo de crecimiento que satisface las necesidades de la generación actual sin comprometer la capacidad de las futuras generaciones.
+            </p>
+            <div style="text-align: center;">
+                <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Naturaleza y desarrollo" style="width: 100%; max-width: 600px; border-radius: 10px;">
+            </div>
+        </section>
+
+        <!-- QR Y COMPARTIR -->
+        <section class="seccion-qr">
+            <h2>¡Difunde el mensaje!</h2>
+            <button class="btn-compartir" id="btnShare">📲 Compartir web completa</button>
+            <div>
+                <p><small>O escanea este código:</small></p>
+                <img id="qrImage" src="" alt="Código QR">
+            </div>
+        </section>
+    </main>
+
+    <footer><p>© 2026 - Proyecto de Desarrollo Sustentable</p></footer>
+
+    <script>
+        const urlActual = window.location.href;
+        document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(urlActual)}`;
+        document.getElementById('btnShare').addEventListener('click', async () => {
+            if (navigator.share) await navigator.share({ title: 'Desarrollo Sustentable', url: urlActual });
+            else alert('Copia el enlace de tu navegador para compartir.');
+        });
+    </script>
+</body>
+</html>

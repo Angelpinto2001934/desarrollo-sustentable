@@ -1,0 +1,75 @@
+/* --- ESTILOS COMPARTIDOS --- */
+:root {
+    --verde-oscuro: #1b5e20;
+    --verde-claro: #4caf50;
+    --fondo-gris: #f5f7f5;
+    --blanco: #ffffff;
+    --texto-oscuro: #333333;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    background-color: var(--fondo-gris);
+    color: var(--texto-oscuro);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Encabezado */
+header {
+    background: linear-gradient(rgba(27, 94, 32, 0.85), rgba(76, 175, 80, 0.7)), 
+                url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3') center/cover;
+    color: var(--blanco);
+    text-align: center;
+    padding: 4rem 2rem;
+}
+header h1 { font-size: 3rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 0.5rem; }
+
+/* Navegación */
+nav {
+    background-color: var(--verde-oscuro);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+nav ul {
+    list-style: none; display: flex; justify-content: center; flex-wrap: wrap; padding: 1rem;
+}
+nav ul li a {
+    color: var(--blanco); text-decoration: none; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 20px; transition: all 0.3s ease;
+}
+nav ul li a:hover, nav ul li a.activo {
+    background-color: var(--blanco); color: var(--verde-oscuro);
+}
+
+/* Contenido Principal */
+main { max-width: 1100px; margin: 2rem auto; padding: 0 2rem; flex: 1; }
+section {
+    background: var(--blanco); padding: 3rem; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 2rem;
+}
+h2 { color: var(--verde-oscuro); text-align: center; font-size: 2.2rem; margin-bottom: 2rem; }
+
+/* Estilo Flyers (Tarjetas) */
+.grid-flyers { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.flyer {
+    background: var(--fondo-gris); border-radius: 12px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #e0e0e0;
+}
+.flyer:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+.flyer img { width: 100%; height: 220px; object-fit: cover; }
+.flyer-info { padding: 1.5rem; }
+.flyer-info h3 { color: var(--verde-oscuro); margin-bottom: 1rem; }
+
+/* Sección Compartir */
+.seccion-qr { text-align: center; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px dashed var(--verde-claro); }
+.btn-compartir {
+    background-color: var(--verde-oscuro); color: var(--blanco); border: none; padding: 15px 35px; font-size: 1.2rem; border-radius: 30px; cursor: pointer; font-weight: bold; transition: transform 0.2s ease; margin: 1.5rem 0;
+}
+.btn-compartir:hover { transform: scale(1.05); background-color: #144918; }
+#qrImage { margin-top: 1rem; padding: 10px; background: white; border-radius: 10px; width: 200px; height: 200px; }
+
+footer { background-color: var(--texto-oscuro); color: white; text-align: center; padding: 1.5rem; margin-top: auto; }
