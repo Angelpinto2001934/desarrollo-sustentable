@@ -57,6 +57,35 @@ p { margin-top: 0; }
 .advertencia { border-left-color: #ce7b20; background: #fff4df; }
 .fuente { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--borde); font-size: .92rem; color: var(--texto-suave); }
 
+.pagina-qr { text-align: center; }
+.tarjeta-qr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 220px;
+  max-width: 100%;
+  margin: 1.5rem auto;
+  padding: 18px;
+  background: white;
+  border: 2px solid var(--verde-600);
+  border-radius: 20px;
+  box-shadow: var(--sombra);
+}
+.tarjeta-qr a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.tarjeta-qr img {
+  display: block;
+  width: 180px;
+  height: 180px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.direccion-sitio { overflow-wrap: anywhere; font-weight: 800; text-align: center; }
+
 .grid-tarjetas { display: grid; gap: 1.3rem; align-items: stretch; }
 .dos-columnas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .tres-columnas { grid-template-columns: repeat(3, minmax(0, 1fr)); }
