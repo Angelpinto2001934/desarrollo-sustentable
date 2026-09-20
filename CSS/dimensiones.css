@@ -1,0 +1,18 @@
+
+.tarjeta-ambiental { border-top: 6px solid #278a57; }
+.tarjeta-social { border-top: 6px solid #b43d72; }
+.tarjeta-economica { border-top: 6px solid #d59121; }
+.tarjeta-territorial { border-top: 6px solid #3979a8; }
+
+.alerta-ambiental { border-left: 4px solid var(--verde-600); }
+
+.escenario-destacado {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 1.4rem;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background: var(--verde-100);
+}
+
+.escenario-destacado p:last-child { margin-bottom: 0; }

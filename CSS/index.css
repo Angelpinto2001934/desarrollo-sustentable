@@ -1,0 +1,16 @@
+
+#concepto .nota {
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.conceptos-clave {
+  margin-top: 1.4rem;
+}
+
+.aclaracion {
+  margin: 1.25rem auto 0;
+  max-width: 850px;
+  text-align: center;
+  color: var(--texto-suave);
+}

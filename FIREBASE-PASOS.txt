@@ -1,0 +1,64 @@
+CONFIGURACIÓN DE FIREBASE — DESARROLLO SUSTENTABLE
+
+ESTADO
+✓ Proyecto Firebase creado.
+✓ App Web registrada.
+✓ firebaseConfig agregado a JS/firebase.js.
+
+FALTA HACER EN FIREBASE CONSOLE
+
+1. AUTHENTICATION
+   - Ve a Authentication.
+   - Pulsa "Comenzar" si aparece.
+   - En Método de acceso / Sign-in method activa:
+       • Anónimo (Anonymous)
+       • Correo electrónico/contraseña (Email/Password)
+   - No actives "Vínculo de correo electrónico (sin contraseña)".
+
+2. FIRESTORE DATABASE
+   - Ve a Firestore Database.
+   - Pulsa "Crear base de datos".
+   - Elige una ubicación cercana/apropiada para el proyecto.
+   - Puedes iniciar en modo producción.
+   - Después abre la pestaña Rules/Reglas.
+   - Reemplaza las reglas por el contenido de firestore.rules y publícalas.
+
+3. CUENTAS DE LOS 4 ADMINISTRADORES
+   - Authentication > Users/Usuarios > Add user/Agregar usuario.
+   - Crea una cuenta con correo y contraseña para cada integrante administrador.
+   - Copia el UID de cada cuenta.
+
+4. COLECCIÓN admins
+   - Firestore Database > Data/Datos.
+   - Crea la colección: admins
+   - Para cada administrador crea un documento cuyo ID sea EXACTAMENTE su UID.
+   - Campo mínimo:
+       nombre (string): "Nombre del integrante"
+
+   Ejemplo:
+     admins
+       └── UID_DE_SARAHI
+             nombre: "Sarahí"
+
+5. VISITANTES
+   - No crees la colección visitantes manualmente.
+   - Se crea automáticamente cuando una persona escribe nombre + escuela y pulsa Ingresar.
+   - Técnicamente Firebase le asigna una cuenta anónima/UID, pero la persona nunca ve correo ni contraseña.
+
+6. VISITANTE ANÓNIMO DEL SITIO
+   - "Continuar como anónimo" NO crea usuario en Firebase.
+   - Puede consultar el contenido.
+   - No puede jugar.
+
+7. JUEGO
+   - La colección resultados se utilizará en la siguiente etapa.
+   - Las reglas ya exigen que el resultado pertenezca a un visitante registrado.
+
+8. ADMINISTRADORES
+   - Inician sesión con correo/contraseña solo en el acceso especial.
+   - La sesión usa persistencia local: si no cierran sesión ni borran datos del navegador, Firebase los recordará.
+
+IMPORTANTE
+- El firebaseConfig de una app Web de Firebase puede estar en el código cliente; no funciona como una contraseña de la base de datos.
+- La protección real de los datos depende de Authentication y de las reglas de Firestore.
+- No publiques las contraseñas de los administradores en GitHub ni dentro del JavaScript.

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Juego educativo para comprobar lo aprendido sobre desarrollo sustentable." name="description"/>
+<title>Juego | Desarrollo Sustentable</title>
+<link href="CSS/general.css" rel="stylesheet"/>
+<link href="CSS/juego.css" rel="stylesheet"/>
+<script defer="" src="JS/general.js"></script>
+<script defer="" src="JS/juego.js"></script>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="encabezado-interno">
+<p class="etiqueta">Pon a prueba lo aprendido</p>
+<h1>Juego sustentable</h1>
+<p>Responde preguntas basadas en el contenido del sitio.</p>
+</header>
+<nav aria-label="Navegación principal">
+<ul>
+<li><a href="index.html">Inicio</a></li>
+<li><a href="dimensiones.html">Dimensiones</a></li>
+<li><a href="principios.html">Principios</a></li>
+<li><a href="agenda2030.html">Agenda 2030</a></li>
+<li><a aria-current="page" class="enlace-juego activo" href="juego.html">Juego</a></li>
+<li><a href="fuentes.html">Fuentes</a></li>
+<li><a href="compartir.html">Compartir</a></li>
+</ul>
+</nav>
+<main id="contenido">
+<section class="juego-portada" hidden="" id="juego-autorizado">
+<p class="sobrelinea">Participante registrado</p>
+<h2>Tu acceso al juego está listo</h2>
+<div class="datos-jugador">
+<span class="dato-jugador" id="jugador-nombre"></span>
+<span class="dato-jugador" id="jugador-escuela"></span>
+</div>
+<div class="juego-proximamente">
+<h3>Siguiente etapa</h3>
+<p>La protección de acceso ya funciona. Aquí colocaremos las preguntas, puntuación y guardado del resultado en Firebase.</p>
+</div>
+</section>
+<section class="juego-portada" hidden="" id="juego-bloqueado">
+<p class="sobrelinea">Registro requerido</p>
+<h2>Para jugar necesitas registrar tu visita</h2>
+<p class="introduccion">Puedes consultar todo el contenido como anónimo, pero el juego requiere nombre y escuela para guardar tu resultado.</p>
+<a class="boton" href="acceso.html?next=juego.html">Registrarme para jugar</a>
+</section>
+</main>
+<footer><p>Proyecto educativo de Desarrollo Sustentable · 2026</p></footer>
+</body>
+</html>

@@ -1,0 +1,28 @@
+.juego-portada {
+  text-align: center;
+}
+
+.datos-jugador {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .7rem;
+  margin: 1.2rem 0;
+}
+
+.dato-jugador {
+  padding: .6rem .9rem;
+  border-radius: 999px;
+  background: var(--verde-100);
+  color: var(--verde-900);
+  font-weight: 800;
+}
+
+.juego-proximamente {
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+  padding: 1.4rem;
+  border: 1px dashed var(--verde-600);
+  border-radius: 16px;
+  background: var(--superficie-suave);
+}

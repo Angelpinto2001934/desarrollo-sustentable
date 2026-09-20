@@ -1,0 +1,42 @@
+
+.pagina-qr { text-align: center; }
+
+.tarjeta-qr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 280px;
+  max-width: 100%;
+  margin: 1.5rem auto;
+  padding: 18px;
+  background: #fff;
+  border: 2px solid var(--verde-600);
+  border-radius: 20px;
+  box-shadow: var(--sombra);
+}
+
+.tarjeta-qr a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.tarjeta-qr img {
+  display: block;
+  width: 220px;
+  height: 220px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.qr-nota {
+  max-width: 620px;
+  margin: 0 auto;
+  color: var(--texto-suave);
+  font-size: .95rem;
+}
+
+.boton-abrir-sitio {
+  margin: .25rem auto 1.1rem;
+}

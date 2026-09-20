@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Registro de visita al sitio de Desarrollo Sustentable.">
+  <title>Bienvenida | Desarrollo Sustentable</title>
+  <link rel="stylesheet" href="CSS/general.css">
+  <link rel="stylesheet" href="CSS/acceso.css">
+  <script type="module" src="JS/acceso.js"></script>
+</head>
+<body class="pagina-acceso">
+  <main class="acceso-contenedor">
+    <section class="acceso-panel" aria-labelledby="titulo-acceso">
+      <div class="marca-acceso" aria-hidden="true">🌱</div>
+      <p class="sobrelinea">Bienvenida</p>
+      <h1 id="titulo-acceso">Desarrollo Sustentable</h1>
+      <p>Registra tu visita para participar en el juego o continúa de forma anónima para consultar el contenido.</p>
+
+      <form class="formulario-acceso" id="formulario-visita" novalidate>
+        <div class="campo">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" name="nombre" type="text" autocomplete="name" minlength="2" maxlength="80" required placeholder="Escribe tu nombre">
+        </div>
+        <div class="campo">
+          <label for="escuela">Escuela</label>
+          <select id="escuela" name="escuela" required>
+            <option value="">Selecciona tu escuela</option>
+            <option value="Escuela Secundaria Técnica José María Luis Mora">Escuela Secundaria Técnica José María Luis Mora</option>
+            <option value="Escuela Secundaria General Número 3 Leona Vicario">Escuela Secundaria General Número 3 Leona Vicario</option>
+          </select>
+        </div>
+        <p class="mensaje-error" id="error-visita" aria-live="polite"></p>
+        <div class="acceso-acciones">
+          <button class="boton" type="submit">Ingresar</button>
+          <button class="boton-anonimo" type="button" id="continuar-anonimo">Continuar como anónimo</button>
+        </div>
+      </form>
+
+      <div class="separador-acceso">Acceso especial</div>
+      <button class="enlace-admin" type="button" id="abrir-admin">Soy administrador</button>
+      <p class="aviso-privacidad">El nombre y la escuela se usarán para registrar la participación y, posteriormente, relacionarla con el resultado del juego.</p>
+    </section>
+  </main>
+
+  <dialog class="dialogo-admin" id="dialogo-admin">
+    <div class="dialogo-admin-contenido">
+      <div class="dialogo-admin-cabecera">
+        <div>
+          <p class="sobrelinea">Acceso restringido</p>
+          <h2>Administrador</h2>
+        </div>
+        <button class="cerrar-admin" type="button" id="cerrar-admin" aria-label="Cerrar">×</button>
+      </div>
+      <p>Este acceso es únicamente para los cuatro integrantes administradores del proyecto.</p>
+      <form class="formulario-admin" id="formulario-admin">
+        <div class="campo">
+          <label for="correo-admin">Correo</label>
+          <input id="correo-admin" type="email" autocomplete="username" required>
+        </div>
+        <div class="campo">
+          <label for="password-admin">Contraseña</label>
+          <input id="password-admin" type="password" autocomplete="current-password" required>
+        </div>
+        <p class="mensaje-error" id="error-admin" aria-live="polite"></p>
+        <button class="boton" type="submit">Entrar como administrador</button>
+      </form>
+    </div>
+  </dialog>
+</body>
+</html>

@@ -5,49 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Código QR para compartir el sitio de Desarrollo Sustentable.">
   <title>Compartir | Desarrollo Sustentable</title>
-  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="CSS/general.css">
+  <link rel="stylesheet" href="CSS/compartir.css">
+  <script src="JS/general.js" defer></script>
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
-
   <header class="encabezado-interno">
     <p class="etiqueta">Difunde el conocimiento</p>
     <h1>Compartir</h1>
     <p>Ayuda a que más personas conozcan la importancia del desarrollo sustentable.</p>
   </header>
-
   <nav aria-label="Navegación principal">
-    <ul>
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="dimensiones.html">Dimensiones</a></li>
-      <li><a href="principios.html">Principios</a></li>
-      <li><a href="agenda2030.html">Agenda 2030</a></li>
-      <li><a class="activo" aria-current="page" href="compartir.html">Compartir</a></li>
-    </ul>
-  </nav>
-
+<ul>
+<li><a href="index.html">Inicio</a></li>
+<li><a href="dimensiones.html">Dimensiones</a></li>
+<li><a href="principios.html">Principios</a></li>
+<li><a href="agenda2030.html">Agenda 2030</a></li>
+<li><a class="enlace-juego" href="juego.html">Juego</a></li>
+<li><a href="fuentes.html">Fuentes</a></li>
+<li><a aria-current="page" class="activo" href="compartir.html">Compartir</a></li>
+</ul>
+</nav>
   <main id="contenido">
     <section class="pagina-qr">
       <p class="sobrelinea">Escanea y visita</p>
       <h2>¡Difunde el mensaje!</h2>
-      <p class="introduccion">Escanea este código QR con la cámara de tu celular para abrir el sitio.</p>
-
+      <p class="introduccion">Escanea el código QR con la cámara de tu celular para abrir el sitio.</p>
       <div class="tarjeta-qr">
-        <a href="https://angelpinto2001934.github.io/desarrollo-sustentable/" target="_blank" rel="noopener noreferrer" aria-label="Abrir el sitio Desarrollo Sustentable">
-          <img
-            src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;data=https%3A%2F%2Fangelpinto2001934.github.io%2Fdesarrollo-sustentable%2F"
-            alt="Código QR para abrir el sitio Desarrollo Sustentable"
-            width="180"
-            height="180"
-          >
-        </a>
+        <img src="IMG/qr-desarrollo-sustentable.png" alt="Código QR para abrir el sitio Desarrollo Sustentable" width="220" height="220" decoding="async">
       </div>
-
+      <a class="boton-enlace boton-abrir-sitio" href="https://angelpinto2001934.github.io/desarrollo-sustentable/" target="_blank" rel="noopener noreferrer">Abrir sitio</a>
+      <p class="qr-nota">El código está guardado dentro del proyecto, por lo que aparece inmediatamente sin depender de un servicio externo.</p>
     </section>
   </main>
-
-  <footer>
-    <p>Proyecto educativo de Desarrollo Sustentable · 2026</p>
-  </footer>
+  <footer><p>Proyecto educativo de Desarrollo Sustentable · 2026</p></footer>
 </body>
 </html>
