@@ -1,6 +1,21 @@
+.principio {
+    border-top: 5px solid var(--verde-600);
+}
 
-.principio { border-top: 5px solid var(--verde-600); }
-.principio .icono { margin-bottom: .35rem; }
-.principios-hannover { max-width: 900px; }
-.practicas-grid .tarjeta:last-child { grid-column: 2; }
-@media (max-width: 850px) { .practicas-grid .tarjeta:last-child { grid-column: auto; } }
+.principio .icono {
+    margin-bottom: .35rem;
+}
+
+.principios-hannover {
+    max-width: 900px;
+}
+
+.practicas-grid .tarjeta:last-child {
+    grid-column: 2;
+}
+
+@media (max-width: 850px) {
+    .practicas-grid .tarjeta:last-child {
+        grid-column: auto;
+    }
+}

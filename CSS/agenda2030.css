@@ -71,7 +71,9 @@
   transition: grid-template-rows .22s ease, opacity .2s ease;
 }
 
-.ods-detalle > div { overflow: hidden; }
+.ods-detalle>div {
+  overflow: hidden;
+}
 
 .ods-detalle p {
   margin: .7rem 0 0;
@@ -85,6 +87,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+
   .ods-item:hover .ods-detalle,
   .ods-item:focus-within .ods-detalle {
     grid-template-rows: 1fr;
@@ -97,25 +100,77 @@
   opacity: 1;
 }
 
-.ods-item:nth-child(1)  { --ods-color: #e5243b; }
-.ods-item:nth-child(2)  { --ods-color: #dda63a; }
-.ods-item:nth-child(3)  { --ods-color: #4c9f38; }
-.ods-item:nth-child(4)  { --ods-color: #c5192d; }
-.ods-item:nth-child(5)  { --ods-color: #ff3a21; }
-.ods-item:nth-child(6)  { --ods-color: #26bde2; }
-.ods-item:nth-child(7)  { --ods-color: #fcc30b; }
-.ods-item:nth-child(8)  { --ods-color: #a21942; }
-.ods-item:nth-child(9)  { --ods-color: #fd6925; }
-.ods-item:nth-child(10) { --ods-color: #dd1367; }
-.ods-item:nth-child(11) { --ods-color: #fd9d24; }
-.ods-item:nth-child(12) { --ods-color: #bf8b2e; }
-.ods-item:nth-child(13) { --ods-color: #3f7e44; }
-.ods-item:nth-child(14) { --ods-color: #0a97d9; }
-.ods-item:nth-child(15) { --ods-color: #56c02b; }
-.ods-item:nth-child(16) { --ods-color: #00689d; }
-.ods-item:nth-child(17) { --ods-color: #19486a; }
+.ods-item:nth-child(1) {
+  --ods-color: #e5243b;
+}
 
-.seccion-clima > .introduccion { max-width: 950px; }
+.ods-item:nth-child(2) {
+  --ods-color: #dda63a;
+}
+
+.ods-item:nth-child(3) {
+  --ods-color: #4c9f38;
+}
+
+.ods-item:nth-child(4) {
+  --ods-color: #c5192d;
+}
+
+.ods-item:nth-child(5) {
+  --ods-color: #ff3a21;
+}
+
+.ods-item:nth-child(6) {
+  --ods-color: #26bde2;
+}
+
+.ods-item:nth-child(7) {
+  --ods-color: #fcc30b;
+}
+
+.ods-item:nth-child(8) {
+  --ods-color: #a21942;
+}
+
+.ods-item:nth-child(9) {
+  --ods-color: #fd6925;
+}
+
+.ods-item:nth-child(10) {
+  --ods-color: #dd1367;
+}
+
+.ods-item:nth-child(11) {
+  --ods-color: #fd9d24;
+}
+
+.ods-item:nth-child(12) {
+  --ods-color: #bf8b2e;
+}
+
+.ods-item:nth-child(13) {
+  --ods-color: #3f7e44;
+}
+
+.ods-item:nth-child(14) {
+  --ods-color: #0a97d9;
+}
+
+.ods-item:nth-child(15) {
+  --ods-color: #56c02b;
+}
+
+.ods-item:nth-child(16) {
+  --ods-color: #00689d;
+}
+
+.ods-item:nth-child(17) {
+  --ods-color: #19486a;
+}
+
+.seccion-clima>.introduccion {
+  max-width: 950px;
+}
 
 .clima-resumen {
   display: grid;
@@ -124,7 +179,9 @@
   margin: 1.5rem 0 2rem;
 }
 
-.clima-concepto { border-top: 5px solid var(--verde-600); }
+.clima-concepto {
+  border-top: 5px solid var(--verde-600);
+}
 
 .clima-galeria {
   display: grid;
@@ -165,7 +222,7 @@
   margin: 2rem 0;
 }
 
-.clima-impactos > h3,
+.clima-impactos>h3,
 .subtitulo-clima,
 .clima-actores h3 {
   text-align: center;
@@ -173,9 +230,18 @@
   margin: 0 0 1.1rem;
 }
 
-.clima-accion { border-top: 5px solid var(--verde-600); }
-.clima-accion ul { padding-left: 1.2rem; margin-bottom: 0; }
-.clima-mexico { margin-top: 1.7rem; }
+.clima-accion {
+  border-top: 5px solid var(--verde-600);
+}
+
+.clima-accion ul {
+  padding-left: 1.2rem;
+  margin-bottom: 0;
+}
+
+.clima-mexico {
+  margin-top: 1.7rem;
+}
 
 .clima-actores {
   margin-top: 1.7rem;
@@ -185,16 +251,36 @@
   background: var(--verde-100);
 }
 
-.clima-actores p { margin: 0; text-align: center; }
+.clima-actores p {
+  margin: 0;
+  text-align: center;
+}
 
 @media (max-width: 850px) {
-  .grid-ods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .clima-resumen, .clima-galeria { grid-template-columns: 1fr; }
-  .clima-galeria img { height: 280px; }
+  .grid-ods {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .clima-resumen,
+  .clima-galeria {
+    grid-template-columns: 1fr;
+  }
+
+  .clima-galeria img {
+    height: 280px;
+  }
 }
 
 @media (max-width: 620px) {
-  .grid-ods { grid-template-columns: 1fr; }
-  .ods-imagen { max-height: none; }
-  .clima-galeria img { height: 220px; }
+  .grid-ods {
+    grid-template-columns: 1fr;
+  }
+
+  .ods-imagen {
+    max-height: none;
+  }
+
+  .clima-galeria img {
+    height: 220px;
+  }
 }

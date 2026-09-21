@@ -1,5 +1,6 @@
-
-.pagina-qr { text-align: center; }
+.pagina-qr {
+  text-align: center;
+}
 
 .tarjeta-qr {
   display: flex;

@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="EcoSurvival: Misión 2030, juego educativo de construcción, misiones y supervivencia sobre desarrollo sustentable.">
+  <meta name="description"
+    content="EcoSurvival: Misión 2030, juego educativo de construcción, misiones y supervivencia sobre desarrollo sustentable.">
   <title>EcoSurvival | Desarrollo Sustentable</title>
   <link rel="stylesheet" href="CSS/general.css">
   <link rel="stylesheet" href="CSS/juego.css">
   <script defer src="JS/general.js"></script>
   <script type="module" src="JS/juego.js"></script>
 </head>
+
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
 
@@ -41,7 +44,8 @@
     <section class="juego-portada" hidden id="juego-bloqueado">
       <p class="sobrelinea">Registro requerido</p>
       <h2>Necesitas registrar tu visita para entrar al juego</h2>
-      <p class="introduccion">Puedes explorar el sitio de forma anónima, pero las partidas y puntuaciones solo están disponibles para visitantes registrados con nombre y escuela.</p>
+      <p class="introduccion">Puedes explorar el sitio de forma anónima, pero las partidas y puntuaciones solo están
+        disponibles para visitantes registrados con nombre y escuela.</p>
       <a class="boton" href="acceso.html?next=juego.html">Registrarme para jugar</a>
     </section>
 
@@ -50,8 +54,10 @@
         <div class="logo-juego" aria-hidden="true">🌍</div>
         <p class="sobrelinea">Nueva partida</p>
         <h2>Tu comunidad está al límite</h2>
-        <p class="introduccion">Tienes tres fases para mejorar una comunidad con contaminación y pocos recursos. Cada decisión cambia el ambiente, la vida de las personas y el dinero disponible.</p>
-        <p class="explicacion-xp"><strong>XP</strong> significa <strong>puntos de experiencia</strong>. Los ganas al tomar buenas decisiones y completar misiones.</p>
+        <p class="introduccion">Tienes tres fases para mejorar una comunidad con contaminación y pocos recursos. Cada
+          decisión cambia el ambiente, la vida de las personas y el dinero disponible.</p>
+        <p class="explicacion-xp"><strong>XP</strong> significa <strong>puntos de experiencia</strong>. Los ganas al
+          tomar buenas decisiones y completar misiones.</p>
 
         <div class="datos-jugador" aria-label="Datos del participante">
           <span class="dato-jugador">🎮 <span id="jugador-nombre"></span></span>
@@ -80,7 +86,8 @@
         </div>
 
         <button class="boton boton-juego-principal" type="button" id="comenzar-juego">Crear mundo</button>
-        <p class="nota-admin" hidden id="nota-admin">Estás jugando como administrador. Esta partida no se agregará a las estadísticas de visitantes.</p>
+        <p class="nota-admin" hidden id="nota-admin">Estás jugando como administrador. Esta partida no se agregará a las
+          estadísticas de visitantes.</p>
       </section>
 
       <section hidden id="pantalla-fase" class="pantalla-fase">
@@ -106,10 +113,14 @@
           <div class="barra-progreso" aria-label="Progreso total de la partida"><span id="barra-progreso"></span></div>
 
           <div class="inventario" aria-label="Recursos disponibles">
-            <div class="recurso"><span aria-hidden="true">🪙</span><span>Créditos</span><strong id="recurso-creditos">600</strong></div>
-            <div class="recurso"><span aria-hidden="true">💧</span><span>Agua</span><strong id="recurso-agua">100</strong></div>
-            <div class="recurso"><span aria-hidden="true">⚡</span><span>Energía</span><strong id="recurso-energia">100</strong></div>
-            <div class="recurso"><span aria-hidden="true">❤️</span><span>Comunidad</span><strong id="recurso-comunidad">100</strong></div>
+            <div class="recurso"><span aria-hidden="true">🪙</span><span>Créditos</span><strong
+                id="recurso-creditos">600</strong></div>
+            <div class="recurso"><span aria-hidden="true">💧</span><span>Agua</span><strong
+                id="recurso-agua">100</strong></div>
+            <div class="recurso"><span aria-hidden="true">⚡</span><span>Energía</span><strong
+                id="recurso-energia">100</strong></div>
+            <div class="recurso"><span aria-hidden="true">❤️</span><span>Comunidad</span><strong
+                id="recurso-comunidad">100</strong></div>
           </div>
         </div>
 
@@ -150,7 +161,8 @@
             <div class="temporizador" id="temporizador" hidden>
               <span aria-hidden="true">⏱️</span>
               <strong id="tiempo-restante">20</strong>s
-              <button type="button" id="pausar-tiempo" class="boton-pausa" aria-label="Pausar el temporizador">Pausar</button>
+              <button type="button" id="pausar-tiempo" class="boton-pausa"
+                aria-label="Pausar el temporizador">Pausar</button>
             </div>
           </div>
           <p class="contexto-reto" id="contexto-reto"></p>
@@ -203,6 +215,9 @@
     </div>
   </main>
 
-  <footer><p>Proyecto educativo de Desarrollo Sustentable · 2026</p></footer>
+  <footer>
+    <p>Proyecto educativo de Desarrollo Sustentable · 2026</p>
+  </footer>
 </body>
+
 </html>

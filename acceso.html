@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="CSS/acceso.css">
   <script type="module" src="JS/acceso.js"></script>
 </head>
+
 <body class="pagina-acceso">
   <main class="acceso-contenedor">
     <section class="acceso-panel" aria-labelledby="titulo-acceso">
@@ -20,14 +22,17 @@
       <form class="formulario-acceso" id="formulario-visita" novalidate>
         <div class="campo">
           <label for="nombre">Nombre</label>
-          <input id="nombre" name="nombre" type="text" autocomplete="name" minlength="2" maxlength="80" required placeholder="Escribe tu nombre">
+          <input id="nombre" name="nombre" type="text" autocomplete="name" minlength="2" maxlength="80" required
+            placeholder="Escribe tu nombre">
         </div>
         <div class="campo">
           <label for="escuela">Escuela</label>
           <select id="escuela" name="escuela" required>
             <option value="">Selecciona tu escuela</option>
-            <option value="Escuela Secundaria Técnica José María Luis Mora">Escuela Secundaria Técnica José María Luis Mora</option>
-            <option value="Escuela Secundaria General Número 3 Leona Vicario">Escuela Secundaria General Número 3 Leona Vicario</option>
+            <option value="Escuela Secundaria Técnica José María Luis Mora">Escuela Secundaria Técnica José María Luis
+              Mora</option>
+            <option value="Escuela Secundaria General Número 3 Leona Vicario">Escuela Secundaria General Número 3 Leona
+              Vicario</option>
           </select>
         </div>
         <p class="mensaje-error" id="error-visita" aria-live="polite"></p>
@@ -39,7 +44,8 @@
 
       <div class="separador-acceso">Acceso especial</div>
       <button class="enlace-admin" type="button" id="abrir-admin">Soy administrador</button>
-      <p class="aviso-privacidad">El nombre y la escuela se usarán para registrar la participación y, posteriormente, relacionarla con el resultado del juego.</p>
+      <p class="aviso-privacidad">El nombre y la escuela se usarán para registrar la participación y, posteriormente,
+        relacionarla con el resultado del juego.</p>
     </section>
   </main>
 
@@ -68,4 +74,5 @@
     </div>
   </dialog>
 </body>
+
 </html>

@@ -27,7 +27,7 @@ body.pagina-acceso {
   font-size: clamp(2rem, 6vw, 3.2rem);
 }
 
-.acceso-panel > p {
+.acceso-panel>p {
   text-align: center;
   color: var(--texto-suave);
 }
@@ -139,5 +139,15 @@ body.pagina-acceso {
   align-items: start;
 }
 
-.dialogo-admin-cabecera h2 { margin: 0; text-align: left; }
-.cerrar-admin { border: 0; background: transparent; color: var(--texto); font-size: 1.7rem; cursor: pointer; }
+.dialogo-admin-cabecera h2 {
+  margin: 0;
+  text-align: left;
+}
+
+.cerrar-admin {
+  border: 0;
+  background: transparent;
+  color: var(--texto);
+  font-size: 1.7rem;
+  cursor: pointer;
+}

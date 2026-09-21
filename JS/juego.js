@@ -292,22 +292,22 @@ function construirMundo() {
   let nivelTexto;
 
   if (promedio >= 80 && recursos.comunidad >= 60) {
-    piezas = ["🌳","🏡","☀️","🌳","🚲","💧","🌱","🏫","♻️","🏠","🌻","🌳","💧","🌿","🏡","🚲","🌳","☀️"];
+    piezas = ["🌳", "🏡", "☀️", "🌳", "🚲", "💧", "🌱", "🏫", "♻️", "🏠", "🌻", "🌳", "💧", "🌿", "🏡", "🚲", "🌳", "☀️"];
     clima = "☀️";
     estadoTexto = "Comunidad resiliente y en equilibrio";
     nivelTexto = "Nivel 4 · Mundo sustentable";
   } else if (promedio >= 65) {
-    piezas = ["🌳","🏠","🌤️","♻️","🌱","💧","🏫","🏠","🚲","🌿","🏘️","🌳","💧","🌱","🏠","♻️","🌤️","🌿"];
+    piezas = ["🌳", "🏠", "🌤️", "♻️", "🌱", "💧", "🏫", "🏠", "🚲", "🌿", "🏘️", "🌳", "💧", "🌱", "🏠", "♻️", "🌤️", "🌿"];
     clima = "🌤️";
     estadoTexto = "La comunidad está recuperando su equilibrio";
     nivelTexto = "Nivel 3 · Zona en mejora";
   } else if (promedio >= 50) {
-    piezas = ["🌿","🏠","🌥️","🗑️","🌱","💧","🏘️","🏭","🚲","🌱","🏚️","🌳","💧","🗑️","🏠","🌥️","🌿","🏭"];
+    piezas = ["🌿", "🏠", "🌥️", "🗑️", "🌱", "💧", "🏘️", "🏭", "🚲", "🌱", "🏚️", "🌳", "💧", "🗑️", "🏠", "🌥️", "🌿", "🏭"];
     clima = "🌥️";
     estadoTexto = "Hay avances, pero todavía existen riesgos";
     nivelTexto = "Nivel 2 · Zona inestable";
   } else {
-    piezas = ["🏭","💨","☁️","🗑️","🏚️","🟫","🏭","💨","🗑️","🏚️","🟫","💧","🗑️","🏭","🏚️","💨","🟫","🗑️"];
+    piezas = ["🏭", "💨", "☁️", "🗑️", "🏚️", "🟫", "🏭", "💨", "🗑️", "🏚️", "🟫", "💧", "🗑️", "🏭", "🏚️", "💨", "🟫", "🗑️"];
     clima = "☁️";
     estadoTexto = "El territorio sigue en situación crítica";
     nivelTexto = "Nivel 1 · Zona vulnerable";
@@ -322,8 +322,8 @@ function construirMundo() {
     const bloque = document.createElement("span");
     bloque.className = "bloque-mundo";
     if (pieza === "💧") bloque.classList.add("agua");
-    if (["🏠","🏡","🏘️","🏫","🏭","🚲","♻️"].includes(pieza)) bloque.classList.add("urbano");
-    if (["💨","🗑️","🏚️","🟫"].includes(pieza)) bloque.classList.add("alerta");
+    if (["🏠", "🏡", "🏘️", "🏫", "🏭", "🚲", "♻️"].includes(pieza)) bloque.classList.add("urbano");
+    if (["💨", "🗑️", "🏚️", "🟫"].includes(pieza)) bloque.classList.add("alerta");
     bloque.textContent = pieza;
     mundoGrid.appendChild(bloque);
   });
