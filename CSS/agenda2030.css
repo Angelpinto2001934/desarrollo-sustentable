@@ -1,7 +1,7 @@
 .grid-ods {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.15rem;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -15,42 +15,48 @@
 
 .ods-boton {
   width: 100%;
-  min-height: 94px;
-  display: grid;
-  grid-template-columns: 46px 1fr auto;
-  align-items: center;
-  gap: .8rem;
-  padding: .9rem;
-  border: 0;
-  border-radius: 14px;
-  color: #fff;
-  background: var(--ods-color);
+  display: block;
+  padding: 0;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--texto);
+  background: var(--superficie-suave);
   text-align: left;
-  font-weight: 800;
-  box-shadow: 0 8px 18px color-mix(in srgb, var(--ods-color) 24%, transparent);
-  transition: transform .18s ease, filter .18s ease;
+  box-shadow: var(--sombra);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
 .ods-boton:hover,
 .ods-boton:focus-visible,
 .ods-item.abierto .ods-boton {
-  transform: translateY(-2px);
-  filter: brightness(1.05);
+  transform: translateY(-5px);
+  border-color: var(--ods-color);
+  box-shadow: 0 16px 30px color-mix(in srgb, var(--ods-color) 20%, transparent);
 }
 
-.ods-numero {
+.ods-imagen {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--ods-color);
+}
+
+.ods-pie {
   display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  color: #173326;
-  background: white;
-  font-size: 1.05rem;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .7rem;
+  min-height: 68px;
+  padding: .8rem .95rem;
+  font-weight: 800;
+  line-height: 1.25;
+  border-top: 5px solid var(--ods-color);
 }
 
 .ods-flecha {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   transition: transform .18s ease;
 }
 
@@ -65,22 +71,19 @@
   transition: grid-template-rows .22s ease, opacity .2s ease;
 }
 
-.ods-detalle > div {
-  overflow: hidden;
-}
+.ods-detalle > div { overflow: hidden; }
 
 .ods-detalle p {
   margin: .7rem 0 0;
-  padding: .85rem 1rem;
+  padding: .95rem 1rem;
   border: 1px solid var(--borde);
-  border-top: 4px solid var(--ods-color);
-  border-radius: 0 0 12px 12px;
+  border-left: 5px solid var(--ods-color);
+  border-radius: 12px;
   background: var(--superficie-suave);
   color: var(--texto);
-  font-size: .94rem;
+  font-size: .95rem;
 }
 
-/* Escritorio: al colocar el cursor se despliega. Teclado y móvil usan JS. */
 @media (hover: hover) and (pointer: fine) {
   .ods-item:hover .ods-detalle,
   .ods-item:focus-within .ods-detalle {
@@ -112,18 +115,86 @@
 .ods-item:nth-child(16) { --ods-color: #00689d; }
 .ods-item:nth-child(17) { --ods-color: #19486a; }
 
+.seccion-clima > .introduccion { max-width: 950px; }
+
+.clima-resumen {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.clima-concepto { border-top: 5px solid var(--verde-600); }
+
+.clima-galeria {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2.1rem;
+}
+
+.clima-galeria figure {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background: var(--superficie-suave);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.clima-galeria figure:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--sombra);
+}
+
+.clima-galeria img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.clima-galeria figcaption {
+  padding: .75rem .9rem;
+  text-align: center;
+  color: var(--texto-suave);
+  font-weight: 700;
+}
+
+.clima-impactos {
+  margin: 2rem 0;
+}
+
+.clima-impactos > h3,
+.subtitulo-clima,
+.clima-actores h3 {
+  text-align: center;
+  font-size: 1.45rem;
+  margin: 0 0 1.1rem;
+}
+
+.clima-accion { border-top: 5px solid var(--verde-600); }
+.clima-accion ul { padding-left: 1.2rem; margin-bottom: 0; }
+.clima-mexico { margin-top: 1.7rem; }
+
+.clima-actores {
+  margin-top: 1.7rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  background: var(--verde-100);
+}
+
+.clima-actores p { margin: 0; text-align: center; }
+
 @media (max-width: 850px) {
-  .grid-ods {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .grid-ods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .clima-resumen, .clima-galeria { grid-template-columns: 1fr; }
+  .clima-galeria img { height: 280px; }
 }
 
 @media (max-width: 620px) {
-  .grid-ods {
-    grid-template-columns: 1fr;
-  }
-
-  .ods-boton {
-    min-height: 82px;
-  }
+  .grid-ods { grid-template-columns: 1fr; }
+  .ods-imagen { max-height: none; }
+  .clima-galeria img { height: 220px; }
 }

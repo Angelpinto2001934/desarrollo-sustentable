@@ -14,6 +14,7 @@ const totalVisitantes = document.querySelector("#total-visitantes");
 const totalResultados = document.querySelector("#total-resultados");
 const promedio = document.querySelector("#promedio-resultados");
 const cuerpo = document.querySelector("#tabla-visitantes");
+const cuerpoResultados = document.querySelector("#tabla-resultados");
 const nombreAdmin = document.querySelector("#nombre-admin");
 const cerrarSesion = document.querySelector("#cerrar-sesion-admin");
 
@@ -87,6 +88,41 @@ async function cargarPanel(usuario) {
           fila.appendChild(celda);
         });
       cuerpo.appendChild(fila);
+    });
+  }
+
+  cuerpoResultados.innerHTML = "";
+  const resultados = [];
+  resultadosSnap.forEach((documento) => resultados.push({ id: documento.id, ...documento.data() }));
+  resultados.sort((a, b) => {
+    const ta = a.fecha?.toMillis?.() || 0;
+    const tb = b.fecha?.toMillis?.() || 0;
+    return tb - ta;
+  });
+
+  if (!resultados.length) {
+    const fila = document.createElement("tr");
+    fila.innerHTML = '<td colspan="6" class="sin-registros">Todavía no hay partidas guardadas.</td>';
+    cuerpoResultados.appendChild(fila);
+  } else {
+    resultados.forEach((resultado) => {
+      const fila = document.createElement("tr");
+      const resultadoTexto = typeof resultado.porcentaje === "number"
+        ? `${resultado.correctas ?? "—"}/${resultado.total ?? "—"} · ${resultado.porcentaje}%`
+        : "—";
+      [
+        resultado.nombre || "—",
+        resultado.escuela || "—",
+        resultadoTexto,
+        resultado.puntos ?? "—",
+        resultado.insignia || "—",
+        fechaLegible(resultado.fecha)
+      ].forEach((valor) => {
+        const celda = document.createElement("td");
+        celda.textContent = valor;
+        fila.appendChild(celda);
+      });
+      cuerpoResultados.appendChild(fila);
     });
   }
 

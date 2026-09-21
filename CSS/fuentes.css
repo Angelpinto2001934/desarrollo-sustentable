@@ -64,3 +64,32 @@
   .grid-fuentes { grid-template-columns: 1fr; }
   .fuente-tarjeta.destacada { grid-template-columns: 1fr; }
 }
+
+/* En modo oscuro, los botones de fuentes coinciden con los botones secundarios del sitio. */
+html[data-theme="dark"] .boton-fuente {
+  background: var(--verde-100);
+  border-color: var(--borde);
+  color: var(--texto);
+}
+
+html[data-theme="dark"] .boton-fuente:hover,
+html[data-theme="dark"] .boton-fuente:focus-visible {
+  background: var(--superficie-suave);
+  border-color: var(--verde-800);
+  color: var(--texto);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .boton-fuente {
+    background: var(--verde-100);
+    border-color: var(--borde);
+    color: var(--texto);
+  }
+
+  html:not([data-theme="light"]):not([data-theme="dark"]) .boton-fuente:hover,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .boton-fuente:focus-visible {
+    background: var(--superficie-suave);
+    border-color: var(--verde-800);
+    color: var(--texto);
+  }
+}
