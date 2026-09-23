@@ -21,6 +21,8 @@ const CLAVE_ADMIN = "ds_admin_recordado";
 const formulario = document.querySelector("#formulario-visita");
 const nombre = document.querySelector("#nombre");
 const escuela = document.querySelector("#escuela");
+const campoActividad = document.querySelector("#campo-actividad");
+const actividad = document.querySelector("#actividad");
 const errorVisita = document.querySelector("#error-visita");
 const botonAnonimo = document.querySelector("#continuar-anonimo");
 const botonAdmin = document.querySelector("#abrir-admin");
@@ -72,12 +74,20 @@ if (FIREBASE_CONFIGURADO) {
   });
 }
 
+escuela.addEventListener("change", () => {
+  const esOtro = escuela.value === "Otro";
+  campoActividad.hidden = !esOtro;
+  actividad.required = esOtro;
+  if (!esOtro) actividad.value = "";
+});
+
 formulario.addEventListener("submit", async (evento) => {
   evento.preventDefault();
   mostrarError(errorVisita, "");
 
   const nombreLimpio = normalizar(nombre.value);
   const escuelaLimpia = normalizar(escuela.value);
+  const actividadLimpia = normalizar(actividad?.value || "");
 
   if (nombreLimpio.length < 2) {
     mostrarError(errorVisita, "Escribe un nombre válido.");
@@ -88,6 +98,12 @@ formulario.addEventListener("submit", async (evento) => {
   if (escuelaLimpia.length < 2) {
     mostrarError(errorVisita, "Selecciona tu escuela.");
     escuela.focus();
+    return;
+  }
+
+  if (escuelaLimpia === "Otro" && actividadLimpia.length < 3) {
+    mostrarError(errorVisita, "Indica a qué te dedicas o de dónde nos visitas.");
+    actividad.focus();
     return;
   }
 
@@ -114,12 +130,14 @@ formulario.addEventListener("submit", async (evento) => {
       uid: credencial.user.uid,
       nombre: nombreLimpio,
       escuela: escuelaLimpia,
+      actividad: escuelaLimpia === "Otro" ? actividadLimpia : "",
       tipo: "registrado"
     };
 
     await setDoc(doc(db, "visitantes", visitante.uid), {
       nombre: visitante.nombre,
       escuela: visitante.escuela,
+      actividad: visitante.actividad,
       tipo: "registrado",
       fechaRegistro: serverTimestamp(),
       ultimoAcceso: serverTimestamp()

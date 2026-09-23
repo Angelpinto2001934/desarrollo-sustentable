@@ -33,8 +33,10 @@
   margin: 0 auto;
 }
 
-.fuente-tarjeta.destacada .icono {
-  font-size: 2.6rem;
+.fuente-tarjeta.destacada .icono-imagen {
+  width: 52px;
+  height: 52px;
+  margin: 0;
 }
 
 .boton-fuente {
@@ -96,4 +98,11 @@ html[data-theme="dark"] .boton-fuente:focus-visible {
     border-color: var(--verde-800);
     color: var(--texto);
   }
+}
+
+.logo-fuente-material {
+  display: block;
+  width: 120px;
+  height: 92px;
+  object-fit: contain;
 }

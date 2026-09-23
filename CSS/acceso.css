@@ -5,7 +5,7 @@ body.pagina-acceso {
   padding: 2rem 1rem;
   background:
     linear-gradient(120deg, rgba(18, 61, 43, .88), rgba(39, 138, 87, .72)),
-    url("https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1800&q=82") center/cover fixed;
+    url("https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&w=1200&q=72") center/cover fixed;
 }
 
 .acceso-contenedor {
@@ -33,8 +33,9 @@ body.pagina-acceso {
 }
 
 .marca-acceso {
+  display: grid;
+  place-items: center;
   text-align: center;
-  font-size: 3rem;
 }
 
 .formulario-acceso,
@@ -150,4 +151,26 @@ body.pagina-acceso {
   color: var(--texto);
   font-size: 1.7rem;
   cursor: pointer;
+}
+
+/* Identidad visual y tono para bachillerato */
+.marca-acceso {
+  margin-bottom: .5rem;
+}
+
+.logo-acceso {
+  display: block;
+  width: min(250px, 72vw);
+  max-height: 170px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.acceso-panel {
+  border: 1px solid color-mix(in srgb, var(--borde) 88%, transparent);
+}
+
+.acceso-panel>p:not(.sobrelinea) {
+  max-width: 500px;
+  margin-inline: auto;
 }

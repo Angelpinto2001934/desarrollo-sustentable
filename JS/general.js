@@ -62,7 +62,6 @@
     dialogo.innerHTML = `
       <div class="dialogo-contenido">
         <button class="cerrar-dialogo" type="button" aria-label="Cerrar">×</button>
-        <span class="dialogo-icono" aria-hidden="true">🎮</span>
         <h2>¿Quieres poner a prueba lo que aprendiste?</h2>
         <p>Para realizar el juego necesitas registrar tu nombre y escuela. El contenido del sitio puede seguir consultándose de forma anónima.</p>
         <div class="dialogo-acciones">
@@ -148,17 +147,69 @@
     document.body.appendChild(contenedor);
   }
 
+
+  function crearNavegacionResponsive() {
+    const nav = document.querySelector("nav[aria-label='Navegación principal']");
+    if (!nav || nav.dataset.preparada === "true") return;
+    nav.dataset.preparada = "true";
+
+    const marca = document.createElement("a");
+    marca.className = "marca-nav";
+    marca.href = "index.html";
+    marca.setAttribute("aria-label", "Ir al inicio");
+    marca.innerHTML = `<img src="IMG/logo-desarrollo.png" alt="Desarrollo Sustentable" width="150" height="115">`;
+    nav.prepend(marca);
+
+    const cerrar = document.createElement("button");
+    cerrar.type = "button";
+    cerrar.className = "cerrar-menu-movil";
+    cerrar.setAttribute("aria-label", "Cerrar menú");
+    cerrar.textContent = "×";
+    nav.appendChild(cerrar);
+
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "menu-movil";
+    boton.setAttribute("aria-label", "Abrir menú");
+    boton.setAttribute("aria-expanded", "false");
+    boton.textContent = "☰";
+
+    const fondo = document.createElement("div");
+    fondo.className = "fondo-menu-movil";
+    fondo.setAttribute("aria-hidden", "true");
+
+    document.body.appendChild(fondo);
+    document.body.appendChild(boton);
+
+    const abrir = () => {
+      nav.classList.add("abierto");
+      document.body.classList.add("menu-abierto");
+      boton.setAttribute("aria-expanded", "true");
+      cerrar.focus();
+    };
+
+    const cerrarMenu = () => {
+      nav.classList.remove("abierto");
+      document.body.classList.remove("menu-abierto");
+      boton.setAttribute("aria-expanded", "false");
+    };
+
+    boton.addEventListener("click", abrir);
+    cerrar.addEventListener("click", cerrarMenu);
+    fondo.addEventListener("click", cerrarMenu);
+    nav.querySelectorAll("a").forEach((enlace) => enlace.addEventListener("click", cerrarMenu));
+    document.addEventListener("keydown", (evento) => {
+      if (evento.key === "Escape" && nav.classList.contains("abierto")) cerrarMenu();
+    });
+  }
+
   function iniciar() {
     aplicarTema(temaGuardado());
-    const estado = obtenerEstado();
 
-    if (!estado) {
-      irAAcceso(location.pathname.split("/").pop() || "index.html");
-      return;
-    }
-
+    // El contenido del sitio es público. El registro solo se solicita
+    // al comenzar una partida dentro de juego.html.
+    crearNavegacionResponsive();
     crearControlTema();
-    protegerJuego(estado);
     window.DSSitio = { aplicarTema, obtenerEstado, irAAcceso };
   }
 

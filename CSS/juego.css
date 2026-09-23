@@ -222,7 +222,7 @@ html[data-theme="dark"] .chip-fase {
 
 .recurso {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: .45rem;
   min-width: 0;
@@ -718,11 +718,11 @@ html[data-theme="dark"] .chip-fase {
   }
 
   .opcion-reto {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr;
   }
 
   .opcion-costo {
-    grid-column: 2;
+    grid-column: 1;
   }
 }
 
@@ -769,4 +769,199 @@ html[data-theme="dark"] .chip-fase {
   background: var(--verde-100);
   color: var(--texto);
   text-align: center;
+}
+
+/* =========================================================
+   REVISIÓN SECUNDARIA / BACHILLERATO
+   ========================================================= */
+
+/* El panel visual de recursos y mundo se eliminó para dar prioridad al reto. */
+.hud-compacto {
+  max-width: 940px;
+  margin: 0 auto 1rem;
+  padding: .85rem 1rem;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--superficie-suave);
+}
+
+.hud-compacto .barra-progreso {
+  margin-bottom: 0;
+}
+
+.palabras-clave {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin: -.25rem 0 1.15rem;
+  padding: .7rem .8rem;
+  border-left: 4px solid var(--verde-800);
+  border-radius: 6px;
+  background: var(--verde-100);
+}
+
+.palabras-clave strong {
+  margin-right: .15rem;
+  color: var(--verde-900);
+  font-size: .88rem;
+}
+
+.palabras-clave span {
+  padding: .25rem .5rem;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--superficie);
+  color: var(--texto);
+  font-size: .82rem;
+  font-weight: 750;
+}
+
+.opcion-clave {
+  max-width: 190px;
+  padding: .28rem .48rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: var(--superficie);
+  color: var(--texto-suave);
+  white-space: normal;
+  text-align: right;
+  line-height: 1.25;
+}
+
+.resumen-final-unico {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 650px;
+}
+
+/* Las preguntas son el elemento principal de la pantalla. */
+.panel-juego {
+  padding-top: 1rem;
+}
+
+.reto {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .opcion-clave {
+    grid-column: 1;
+    max-width: none;
+    text-align: left;
+  }
+}
+
+
+/* =========================================================
+   CONTADOR EN LAS TRES FASES
+   ========================================================= */
+.temporizador-etiqueta {
+  font-size: .78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* El juego se mantiene sin imágenes para dar prioridad al análisis de los casos. */
+.fases-previa article {
+  align-content: start;
+}
+
+
+/* =========================================================
+   REGISTRO SOLO AL INICIAR PARTIDA
+   ========================================================= */
+.nota-registro-juego {
+  max-width: 720px;
+  margin: 1rem auto .35rem;
+  color: var(--texto-suave);
+  font-size: .94rem;
+}
+
+.dialogo-registro-juego {
+  width: min(92vw, 560px);
+  max-height: 90vh;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background: var(--superficie);
+  color: var(--texto);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .28);
+}
+
+.dialogo-registro-juego::backdrop {
+  background: rgba(0, 0, 0, .62);
+  backdrop-filter: blur(2px);
+}
+
+.registro-juego-contenido {
+  position: relative;
+  padding: clamp(1.4rem, 4vw, 2.2rem);
+}
+
+.registro-juego-contenido h2 {
+  margin-top: .2rem;
+  font-size: clamp(1.55rem, 4vw, 2.1rem);
+}
+
+.cerrar-registro-juego {
+  position: absolute;
+  top: .7rem;
+  right: .9rem;
+  border: 0;
+  background: transparent;
+  color: var(--texto);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.formulario-registro-juego {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.35rem;
+  text-align: left;
+}
+
+.campo-registro-juego {
+  display: grid;
+  gap: .45rem;
+}
+
+.campo-registro-juego label {
+  font-weight: 800;
+  color: var(--verde-900);
+}
+
+.campo-registro-juego input,
+.campo-registro-juego select {
+  width: 100%;
+  min-height: 46px;
+  padding: .75rem .85rem;
+  border: 1px solid var(--borde);
+  border-radius: 9px;
+  background: var(--superficie-suave);
+  color: var(--texto);
+  font: inherit;
+}
+
+.mensaje-registro-juego {
+  min-height: 1.25rem;
+  margin: 0;
+  color: #b53b3b;
+  font-weight: 700;
+}
+
+.acciones-registro-juego {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: .2rem;
+}
+
+@media (max-width: 560px) {
+  .acciones-registro-juego>* {
+    width: 100%;
+  }
 }

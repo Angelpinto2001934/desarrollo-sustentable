@@ -1,223 +1,196 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="EcoSurvival: Misión 2030, juego educativo de construcción, misiones y supervivencia sobre desarrollo sustentable.">
-  <title>EcoSurvival | Desarrollo Sustentable</title>
-  <link rel="stylesheet" href="CSS/general.css">
-  <link rel="stylesheet" href="CSS/juego.css">
-  <script defer src="JS/general.js"></script>
-  <script type="module" src="JS/juego.js"></script>
+    <link href="https://images.unsplash.com" rel="preconnect" />
+    <link href="https://commons.wikimedia.org" rel="preconnect" />
+    <link href="https://thumb.wikimedia.org" rel="preconnect" />
+    <link href="https://upload.wikimedia.org" rel="preconnect" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta
+        content="EcoSurvival: Misión 2030, juego educativo de construcción, misiones y supervivencia sobre desarrollo sustentable."
+        name="description" />
+    <title>EcoSurvival | Desarrollo Sustentable</title>
+    <link href="CSS/general.css" rel="stylesheet" />
+    <link href="CSS/juego.css" rel="stylesheet" />
+    <script defer="" src="JS/general.js"></script>
+    <script src="JS/juego.js" type="module"></script>
 </head>
 
 <body>
-  <a class="saltar" href="#contenido">Saltar al contenido</a>
-
-  <header class="encabezado-interno encabezado-juego">
-    <p class="etiqueta">Construye · Decide · Sobrevive</p>
-    <h1>EcoSurvival: Misión 2030</h1>
-    <p>Ayuda a una comunidad a mejorar tomando buenas decisiones antes de que se acaben sus recursos.</p>
-  </header>
-
-  <nav aria-label="Navegación principal">
-    <ul>
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="dimensiones.html">Dimensiones</a></li>
-      <li><a href="principios.html">Principios</a></li>
-      <li><a href="agenda2030.html">Agenda 2030</a></li>
-      <li><a aria-current="page" class="enlace-juego activo" href="juego.html">Juego</a></li>
-      <li><a href="fuentes.html">Fuentes</a></li>
-      <li><a href="compartir.html">Compartir</a></li>
-    </ul>
-  </nav>
-
-  <main id="contenido">
-    <section class="juego-portada" id="estado-juego">
-      <p class="sobrelinea">Conectando partida</p>
-      <h2>Comprobando tu acceso...</h2>
-      <p class="introduccion">Preparando tu mundo. Solo tardará un momento.</p>
-    </section>
-
-    <section class="juego-portada" hidden id="juego-bloqueado">
-      <p class="sobrelinea">Registro requerido</p>
-      <h2>Necesitas registrar tu visita para entrar al juego</h2>
-      <p class="introduccion">Puedes explorar el sitio de forma anónima, pero las partidas y puntuaciones solo están
-        disponibles para visitantes registrados con nombre y escuela.</p>
-      <a class="boton" href="acceso.html?next=juego.html">Registrarme para jugar</a>
-    </section>
-
-    <div hidden id="juego-autorizado">
-      <section class="juego-portada portada-ecos" id="pantalla-inicio">
-        <div class="logo-juego" aria-hidden="true">🌍</div>
-        <p class="sobrelinea">Nueva partida</p>
-        <h2>Tu comunidad está al límite</h2>
-        <p class="introduccion">Tienes tres fases para mejorar una comunidad con contaminación y pocos recursos. Cada
-          decisión cambia el ambiente, la vida de las personas y el dinero disponible.</p>
-        <p class="explicacion-xp"><strong>XP</strong> significa <strong>puntos de experiencia</strong>. Los ganas al
-          tomar buenas decisiones y completar misiones.</p>
-
-        <div class="datos-jugador" aria-label="Datos del participante">
-          <span class="dato-jugador">🎮 <span id="jugador-nombre"></span></span>
-          <span class="dato-jugador">🏫 <span id="jugador-escuela"></span></span>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+    <header class="encabezado-interno encabezado-juego">
+        <p class="etiqueta">Construye · Decide · Sobrevive</p>
+        <h1>EcoSurvival: Misión 2030</h1>
+        <p>Analiza escenarios de sustentabilidad con criterios de nivel bachillerato: evidencia, indicadores, impactos y
+            toma de decisiones.</p>
+    </header>
+    <nav aria-label="Navegación principal">
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="dimensiones.html">Dimensiones</a></li>
+            <li><a href="principios.html">Principios</a></li>
+            <li><a href="agenda2030.html">Agenda 2030</a></li>
+            <li><a aria-current="page" class="enlace-juego activo" href="juego.html">Juego</a></li>
+            <li><a href="fuentes.html">Fuentes</a></li>
+            <li><a href="compartir.html">Compartir</a></li>
+        </ul>
+    </nav>
+    <main id="contenido">
+        <div id="juego-autorizado">
+            <section class="juego-portada portada-ecos" id="pantalla-inicio">
+                <p class="sobrelinea">Nueva partida</p>
+                <h2>Tu comunidad está al límite</h2>
+                <p class="introduccion">Supera tres fases con situaciones ambientales, sociales y territoriales. Las
+                    opciones son deliberadamente similares: compara evidencia, alcance e impactos antes de responder.
+                </p>
+                <p class="explicacion-xp"><strong>XP</strong> significa <strong>puntos de experiencia</strong>. Los
+                    ganas al tomar buenas decisiones y completar misiones.</p>
+                <div aria-label="Datos del participante" class="datos-jugador" id="datos-jugador" hidden>
+                    <span class="dato-jugador"><strong>Jugador:</strong> <span id="jugador-nombre"></span></span>
+                    <span class="dato-jugador"><strong>Procedencia:</strong> <span id="jugador-escuela"></span></span>
+                </div>
+                <div aria-label="Fases del juego" class="fases-previa">
+                    <article>
+                        <span class="fase-numero">01</span>
+                        <strong>Construcción por bloques</strong>
+                        <p>Compara propuestas y elige soluciones que ayuden a toda la comunidad.</p>
+                    </article>
+                    <article>
+                        <span class="fase-numero">02</span>
+                        <strong>Misiones 2030</strong>
+                        <p>Analiza situaciones reales sobre tu escuela, tu comunidad, los principios y los ODS.</p>
+                    </article>
+                    <article>
+                        <span class="fase-numero">03</span>
+                        <strong>Zona de supervivencia</strong>
+                        <p>Enfrenta eventos climáticos y toma decisiones con información limitada antes de que se acabe
+                            el tiempo.</p>
+                    </article>
+                </div>
+                <p class="nota-registro-juego">El sitio es público. Para iniciar una partida solo te pediremos un
+                    registro breve; no necesitas crear contraseña.</p>
+                <button class="boton boton-juego-principal" id="comenzar-juego" type="button">Crear mundo</button>
+                <p class="nota-admin" hidden="" id="nota-admin">Estás jugando como administrador. Esta partida no se
+                    agregará a las estadísticas de visitantes.</p>
+            </section>
+            <section class="pantalla-fase" hidden="" id="pantalla-fase">
+                <p class="sobrelinea" id="fase-presentacion-numero">Fase 1 de 3</p>
+                <h2 id="fase-presentacion-titulo">Construcción por bloques</h2>
+                <p class="introduccion" id="fase-presentacion-texto"></p>
+                <div class="objetivo-fase" id="fase-presentacion-objetivo"></div>
+                <button class="boton" id="entrar-fase" type="button">Entrar a la fase</button>
+            </section>
+            <section class="panel-juego" hidden="" id="pantalla-juego">
+                <div aria-label="Estado de la partida" class="hud-juego hud-compacto">
+                    <div class="hud-superior">
+                        <div class="hud-identidad">
+                            <span class="chip-fase" id="chip-fase">Construcción</span>
+                            <span class="contador-reto" id="contador-reto">Misión 1 de 9</span>
+                            <span class="racha" id="racha">Racha 0</span>
+                        </div>
+                        <div class="xp"><span id="puntos">0</span> XP</div>
+                    </div>
+                    <div aria-label="Progreso total de la partida" class="barra-progreso"><span
+                            id="barra-progreso"></span></div>
+                </div>
+                <article aria-live="polite" class="reto" id="reto-actual">
+                    <div class="reto-cabecera">
+                        <div>
+                            <p class="tipo-reto" id="tipo-reto"></p>
+                            <h2 id="pregunta-reto"></h2>
+                        </div>
+                        <div class="temporizador" hidden="" id="temporizador">
+                            <span class="temporizador-etiqueta">Tiempo</span>
+                            <strong id="tiempo-restante">60</strong><span>s</span>
+                            <button aria-label="Pausar el temporizador" class="boton-pausa" id="pausar-tiempo"
+                                type="button">Pausar</button>
+                        </div>
+                    </div>
+                    <p class="contexto-reto" id="contexto-reto"></p>
+                    <div aria-label="Palabras clave del reto" class="palabras-clave" id="palabras-clave"></div>
+                    <div class="opciones-reto" id="opciones-reto"></div>
+                    <div class="feedback-reto" hidden="" id="feedback-reto"></div>
+                    <button class="boton boton-continuar" hidden="" id="continuar-reto" type="button">Continuar
+                        misión</button>
+                </article>
+            </section>
+            <section class="resultado-final" hidden="" id="pantalla-final">
+                <p class="sobrelinea">Partida terminada</p>
+                <h2 id="titulo-final">¡Comunidad recuperada!</h2>
+                <p class="introduccion" id="mensaje-final"></p>
+                <div class="tarjeta-puntuacion">
+                    <div><span>Misiones superadas</span><strong id="correctas-final">0/9</strong></div>
+                    <div><span>Experiencia (XP)</span><strong><span id="puntos-final">0</span> XP</strong></div>
+                    <div><span>Aciertos</span><strong id="porcentaje-final">0%</strong></div>
+                </div>
+                <div class="rango-final">
+                    <span>Nivel alcanzado</span>
+                    <strong id="insignia-final">Novato verde</strong>
+                </div>
+                <div class="resumen-final-grid resumen-final-unico">
+                    <div class="equilibrio-final">
+                        <h3>Impacto de tus decisiones</h3>
+                        <div class="resultado-dimension"><span>Ambiental</span><strong id="ambiental-final">45%</strong>
+                        </div>
+                        <div class="resultado-dimension"><span>Social</span><strong id="social-final">45%</strong></div>
+                        <div class="resultado-dimension"><span>Económica</span><strong id="economica-final">45%</strong>
+                        </div>
+                    </div>
+                </div>
+                <p aria-live="polite" class="estado-guardado" id="estado-guardado"></p>
+                <div class="acciones-finales">
+                    <button class="boton" id="reintentar-juego" type="button">Crear otro mundo</button>
+                    <a class="boton-secundario" href="agenda2030.html">Repasar Agenda 2030</a>
+                </div>
+            </section>
         </div>
-
-        <div class="fases-previa" aria-label="Fases del juego">
-          <article>
-            <span class="fase-numero">01</span>
-            <span class="fase-icono" aria-hidden="true">🧱</span>
-            <strong>Construcción por bloques</strong>
-            <p>Usa tus recursos para construir soluciones que ayuden a toda la comunidad.</p>
-          </article>
-          <article>
-            <span class="fase-numero">02</span>
-            <span class="fase-icono" aria-hidden="true">🎮</span>
-            <strong>Misiones 2030</strong>
-            <p>Resuelve situaciones fáciles sobre tu escuela, tu comunidad y los ODS.</p>
-          </article>
-          <article>
-            <span class="fase-numero">03</span>
-            <span class="fase-icono" aria-hidden="true">🔥</span>
-            <strong>Zona de supervivencia</strong>
-            <p>Enfrenta calor, lluvias fuertes e incendios antes de que se acabe el tiempo.</p>
-          </article>
+    </main>
+    <dialog class="dialogo-registro-juego" id="dialogo-registro-juego">
+        <div class="registro-juego-contenido">
+            <button aria-label="Cerrar registro" class="cerrar-registro-juego" id="cerrar-registro-juego"
+                type="button">×</button>
+            <p class="sobrelinea">Registro para jugar</p>
+            <h2>Antes de crear tu mundo</h2>
+            <p>El contenido del sitio es público. Estos datos se solicitan únicamente para registrar tu participación y
+                guardar el resultado de la partida.</p>
+            <form class="formulario-registro-juego" id="formulario-registro-juego" novalidate>
+                <div class="campo-registro-juego">
+                    <label for="nombre-juego">Nombre</label>
+                    <input autocomplete="name" id="nombre-juego" maxlength="80" minlength="2"
+                        placeholder="Escribe tu nombre" required type="text">
+                </div>
+                <div class="campo-registro-juego">
+                    <label for="escuela-juego">Escuela o procedencia</label>
+                    <select id="escuela-juego" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="CBTIS 72">CBTIS 72</option>
+                        <option value="BACHILLER CEB510">BACHILLER CEB510</option>
+                        <option value="CONALEP">CONALEP</option>
+                        <option value="Otro">Otra institución / No pertenezco a estas escuelas</option>
+                    </select>
+                </div>
+                <div class="campo-registro-juego" id="campo-actividad-juego" hidden>
+                    <label for="actividad-juego">¿A qué te dedicas o de dónde nos visitas?</label>
+                    <input id="actividad-juego" maxlength="100"
+                        placeholder="Ej. estudiante de otra escuela, docente, trabajador..." type="text">
+                </div>
+                <p aria-live="polite" class="mensaje-registro-juego" id="error-registro-juego"></p>
+                <div class="acciones-registro-juego">
+                    <button class="boton" type="submit">Comenzar partida</button>
+                    <button class="boton-secundario" id="cancelar-registro-juego" type="button">Cancelar</button>
+                </div>
+            </form>
         </div>
-
-        <button class="boton boton-juego-principal" type="button" id="comenzar-juego">Crear mundo</button>
-        <p class="nota-admin" hidden id="nota-admin">Estás jugando como administrador. Esta partida no se agregará a las
-          estadísticas de visitantes.</p>
-      </section>
-
-      <section hidden id="pantalla-fase" class="pantalla-fase">
-        <div class="fase-presentacion-icono" id="fase-presentacion-icono" aria-hidden="true">🧱</div>
-        <p class="sobrelinea" id="fase-presentacion-numero">Fase 1 de 3</p>
-        <h2 id="fase-presentacion-titulo">Construcción por bloques</h2>
-        <p class="introduccion" id="fase-presentacion-texto"></p>
-        <div class="objetivo-fase" id="fase-presentacion-objetivo"></div>
-        <button class="boton" type="button" id="entrar-fase">Entrar a la fase</button>
-      </section>
-
-      <section hidden id="pantalla-juego" class="panel-juego">
-        <div class="hud-juego" aria-label="Estado de la partida">
-          <div class="hud-superior">
-            <div class="hud-identidad">
-              <span class="chip-fase" id="chip-fase">🧱 Construcción</span>
-              <span class="contador-reto" id="contador-reto">Misión 1 de 9</span>
-              <span class="racha" id="racha">🔥 Racha 0</span>
-            </div>
-            <div class="xp"><span id="puntos">0</span> XP</div>
-          </div>
-
-          <div class="barra-progreso" aria-label="Progreso total de la partida"><span id="barra-progreso"></span></div>
-
-          <div class="inventario" aria-label="Recursos disponibles">
-            <div class="recurso"><span aria-hidden="true">🪙</span><span>Créditos</span><strong
-                id="recurso-creditos">600</strong></div>
-            <div class="recurso"><span aria-hidden="true">💧</span><span>Agua</span><strong
-                id="recurso-agua">100</strong></div>
-            <div class="recurso"><span aria-hidden="true">⚡</span><span>Energía</span><strong
-                id="recurso-energia">100</strong></div>
-            <div class="recurso"><span aria-hidden="true">❤️</span><span>Comunidad</span><strong
-                id="recurso-comunidad">100</strong></div>
-          </div>
-        </div>
-
-        <div class="tablero-comunidad">
-          <div class="mundo-bloques" aria-label="Estado visual de la comunidad">
-            <div class="mundo-cielo"><span>☁️</span><span id="mundo-clima">🌤️</span><span>☁️</span></div>
-            <div class="mundo-grid" id="mundo-grid" aria-hidden="true"></div>
-            <div class="mundo-estado">
-              <strong id="estado-comunidad">Territorio en recuperación</strong>
-              <span id="nivel-comunidad">Nivel 1 · Zona vulnerable</span>
-            </div>
-          </div>
-
-          <div class="panel-equilibrio">
-            <h3>¿Cómo va tu comunidad?</h3>
-            <div class="medidor">
-              <div class="medidor-titulo"><span>🌿 Ambiental</span><strong id="valor-ambiental">45%</strong></div>
-              <div class="medidor-barra"><span id="barra-ambiental"></span></div>
-            </div>
-            <div class="medidor">
-              <div class="medidor-titulo"><span>👥 Social</span><strong id="valor-social">45%</strong></div>
-              <div class="medidor-barra"><span id="barra-social"></span></div>
-            </div>
-            <div class="medidor">
-              <div class="medidor-titulo"><span>💰 Económica</span><strong id="valor-economica">45%</strong></div>
-              <div class="medidor-barra"><span id="barra-economica"></span></div>
-            </div>
-            <p class="consejo-equilibrio">La meta es que ambiente, personas y economía mejoren juntos.</p>
-          </div>
-        </div>
-
-        <article class="reto" id="reto-actual" aria-live="polite">
-          <div class="reto-cabecera">
-            <div>
-              <p class="tipo-reto" id="tipo-reto"></p>
-              <h2 id="pregunta-reto"></h2>
-            </div>
-            <div class="temporizador" id="temporizador" hidden>
-              <span aria-hidden="true">⏱️</span>
-              <strong id="tiempo-restante">20</strong>s
-              <button type="button" id="pausar-tiempo" class="boton-pausa"
-                aria-label="Pausar el temporizador">Pausar</button>
-            </div>
-          </div>
-          <p class="contexto-reto" id="contexto-reto"></p>
-          <div class="opciones-reto" id="opciones-reto"></div>
-          <div class="feedback-reto" id="feedback-reto" hidden></div>
-          <button class="boton boton-continuar" type="button" id="continuar-reto" hidden>Continuar misión</button>
-        </article>
-      </section>
-
-      <section hidden id="pantalla-final" class="resultado-final">
-        <p class="sobrelinea">Partida terminada</p>
-        <div class="trofeo" aria-hidden="true" id="icono-insignia">🏆</div>
-        <h2 id="titulo-final">¡Comunidad recuperada!</h2>
-        <p class="introduccion" id="mensaje-final"></p>
-
-        <div class="tarjeta-puntuacion">
-          <div><span>Misiones superadas</span><strong id="correctas-final">0/9</strong></div>
-          <div><span>Experiencia (XP)</span><strong><span id="puntos-final">0</span> XP</strong></div>
-          <div><span>Aciertos</span><strong id="porcentaje-final">0%</strong></div>
-        </div>
-
-        <div class="rango-final">
-          <span>Rango obtenido</span>
-          <strong id="insignia-final">Novato verde</strong>
-        </div>
-
-        <div class="resumen-final-grid">
-          <div class="equilibrio-final">
-            <h3>Equilibrio final</h3>
-            <div class="resultado-dimension"><span>🌿 Ambiental</span><strong id="ambiental-final">45%</strong></div>
-            <div class="resultado-dimension"><span>👥 Social</span><strong id="social-final">45%</strong></div>
-            <div class="resultado-dimension"><span>💰 Económica</span><strong id="economica-final">45%</strong></div>
-          </div>
-          <div class="recursos-finales">
-            <h3>Recursos restantes</h3>
-            <div><span>🪙 Créditos</span><strong id="creditos-final">0</strong></div>
-            <div><span>💧 Agua</span><strong id="agua-final">0</strong></div>
-            <div><span>⚡ Energía</span><strong id="energia-final">0</strong></div>
-            <div><span>❤️ Comunidad</span><strong id="comunidad-final">0</strong></div>
-          </div>
-        </div>
-
-        <p class="estado-guardado" id="estado-guardado" aria-live="polite"></p>
-
-        <div class="acciones-finales">
-          <button class="boton" type="button" id="reintentar-juego">Crear otro mundo</button>
-          <a class="boton-secundario" href="agenda2030.html">Repasar Agenda 2030</a>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <p>Proyecto educativo de Desarrollo Sustentable · 2026</p>
-  </footer>
+    </dialog>
+    <footer>
+        <p class="footer-principal">Proyecto educativo de la asignatura de Desarrollo Sustentable.</p>
+        <p class="footer-secundario">Contenido elaborado con fines académicos y de divulgación.</p>
+        <p class="footer-secundario">TecNM · Instituto Tecnológico Superior de Felipe Carrillo Puerto · Ingeniería en
+            Sistemas Computacionales.</p>
+    </footer>
 </body>
 
 </html>

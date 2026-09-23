@@ -76,12 +76,12 @@ async function cargarPanel(usuario) {
 
   if (!visitantes.length) {
     const fila = document.createElement("tr");
-    fila.innerHTML = '<td colspan="4" class="sin-registros">Todavía no hay visitantes registrados.</td>';
+    fila.innerHTML = '<td colspan="5" class="sin-registros">Todavía no hay visitantes registrados.</td>';
     cuerpo.appendChild(fila);
   } else {
     visitantes.forEach((visitante) => {
       const fila = document.createElement("tr");
-      [visitante.nombre || "—", visitante.escuela || "—", fechaLegible(visitante.fechaRegistro), visitante.uid.slice(0, 8) + "…"]
+      [visitante.nombre || "—", visitante.escuela || "—", visitante.actividad || "—", fechaLegible(visitante.fechaRegistro), visitante.uid.slice(0, 8) + "…"]
         .forEach((valor) => {
           const celda = document.createElement("td");
           celda.textContent = valor;
@@ -112,7 +112,7 @@ async function cargarPanel(usuario) {
         : "—";
       [
         resultado.nombre || "—",
-        resultado.escuela || "—",
+        resultado.escuela === "Otro" ? (resultado.actividad || "Otro") : (resultado.escuela || "—"),
         resultadoTexto,
         resultado.puntos ?? "—",
         resultado.insignia || "—",

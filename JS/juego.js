@@ -1,203 +1,327 @@
 import { auth, db } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import {
+  browserSessionPersistence,
+  onAuthStateChanged,
+  setPersistence,
+  signInAnonymously,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 import {
   addDoc,
   collection,
   doc,
   getDoc,
-  serverTimestamp
+  serverTimestamp,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 const CLAVE_VISITANTE = "ds_visitante";
 const CLAVE_ADMIN = "ds_admin_recordado";
+const TIEMPO_POR_MISION = 60;
 
 const fases = [
   {
     numero: 1,
-    nombre: "Construcción por bloques",
-    corto: "🧱 Construcción",
-    icono: "🧱",
-    texto: "Empiezas con una comunidad que tiene pocos recursos. Elige qué construir para mejorarla sin gastar todo.",
-    objetivo: "Objetivo: cuidar el ambiente, ayudar a las personas y usar bien el dinero."
+    nombre: "Diagnóstico y diseño sustentable",
+    corto: "Diagnóstico",
+    texto: "Analiza problemas escolares y urbanos. Tienes 60 segundos para identificar qué propuesta está mejor sustentada por datos y criterios integrales.",
+    objetivo: "Objetivo: distinguir soluciones sistémicas de acciones aisladas que solo atienden una parte del problema."
   },
   {
     numero: 2,
-    nombre: "Misiones 2030",
-    corto: "🎮 Misiones 2030",
-    icono: "🎮",
-    texto: "Ahora aparecen retos sobre problemas que pueden pasar en una escuela o comunidad.",
-    objetivo: "Objetivo: elegir la mejor solución usando lo que aprendiste en el sitio."
+    nombre: "Principios y Agenda 2030",
+    corto: "Principios y ODS",
+    texto: "Relaciona casos con principios de sustentabilidad, dimensiones y ODS. Todas las opciones son plausibles; compara alcance, evidencia y efectos.",
+    objetivo: "Objetivo: aplicar conceptos, no repetir definiciones de memoria."
   },
   {
     numero: 3,
-    nombre: "Zona de supervivencia",
-    corto: "🔥 Supervivencia",
-    icono: "🔥",
-    texto: "Llegan calor extremo, lluvias fuertes e incendios. En esta fase tendrás 30 segundos para decidir qué hacer en cada reto.",
-    objetivo: "Objetivo: proteger a las personas y cuidar los recursos de la comunidad."
+    nombre: "Decisiones ante riesgos climáticos",
+    corto: "Riesgo climático",
+    texto: "Evalúa respuestas frente a calor, inundaciones e incendios. Tienes 60 segundos por caso para elegir la estrategia con mayor prevención y resiliencia.",
+    objetivo: "Objetivo: priorizar medidas integrales que reduzcan vulnerabilidad y consideren el territorio."
   }
 ];
 
 const misiones = [
   {
-    id: "bloques-escuela",
+    id: "bachiller-diagnostico",
     fase: 1,
-    tipo: "Construcción · Tu escuela",
-    pregunta: "En tu escuela quieren gastar menos agua y luz y producir menos basura. ¿Qué harías primero?",
-    contexto: "Elige la opción que ayude a la escuela y también cuide sus recursos.",
+    tipo: "Fase 1 · Gestión escolar",
+    pregunta: "El plantel detecta un aumento del 18 % en consumo eléctrico, fugas recurrentes y mayor generación de residuos. El presupuesto solo permite iniciar una intervención. ¿Qué decisión ofrece una base más sólida para actuar?",
+    contexto: "No elijas por intuición. Considera cómo se identifica una prioridad y cómo se comprobaría después si la intervención funcionó.",
+    palabrasClave: ["línea base", "priorización", "indicadores"],
+    concepto: "Diagnóstico y mejora continua",
     opciones: [
-      {
-        icono: "♻️", titulo: "Hacer un plan verde", texto: "Separar basura, reparar fugas, apagar luces que no se usan y pedir ayuda a los estudiantes.", costo: "🪙 -140",
-        correcta: true, equilibrio: { ambiental: 12, social: 10, economica: 8 }, recursos: { creditos: -140, agua: 5, energia: 5, comunidad: 8 }
-      },
-      {
-        icono: "💻", titulo: "Comprar cosas caras", texto: "Comprar tecnología nueva sin revisar primero qué problema tiene la escuela.", costo: "🪙 -260",
-        correcta: false, equilibrio: { ambiental: 2, social: -7, economica: -10 }, recursos: { creditos: -260, energia: -8, comunidad: -7 }
-      },
-      {
-        icono: "💵", titulo: "Solo gastar menos", texto: "Ahorrar dinero aunque se desperdicie agua o se produzca más basura.", costo: "🪙 +80",
-        correcta: false, equilibrio: { ambiental: -12, social: -4, economica: 4 }, recursos: { creditos: 80, agua: -8, comunidad: -4 }
-      }
+      { titulo: "Construir una línea base y priorizar impactos",
+        texto: "Medir consumos, pérdidas y residuos; identificar causas; comparar impacto y costo; fijar metas e indicadores antes de asignar el presupuesto.",
+        clave: "medir · priorizar · verificar", correcta: true,
+        equilibrio: { ambiental: 12, social: 8, economica: 10 } },
+      { titulo: "Sustituir primero los equipos de mayor consumo",
+        texto: "Cambiar luminarias y aparatos antiguos por modelos eficientes porque la electricidad representa un gasto permanente del plantel.",
+        clave: "eficiencia · tecnología", correcta: false,
+        equilibrio: { ambiental: 7, social: 2, economica: 3 } },
+      { titulo: "Iniciar una campaña de hábitos responsables",
+        texto: "Promover ahorro de agua, separación de residuos y apagado de equipos antes de realizar inversiones en infraestructura.",
+        clave: "hábitos · participación", correcta: false,
+        equilibrio: { ambiental: 5, social: 8, economica: 4 } },
+      { titulo: "Distribuir el presupuesto entre los tres problemas",
+        texto: "Asignar una tercera parte a energía, agua y residuos para asegurar que ningún problema quede sin atención durante el ciclo escolar.",
+        clave: "reparto · cobertura", correcta: false,
+        equilibrio: { ambiental: 4, social: 4, economica: -1 } }
     ],
-    explicacion: "Una decisión sustentable trata de cuidar el ambiente, a las personas y el dinero al mismo tiempo."
+    explicacion: "Una línea base permite saber cuánto se consume, dónde se pierde y qué problema produce mayor impacto. Después se puede priorizar y medir resultados con indicadores, en lugar de invertir sin diagnóstico."
   },
   {
-    id: "bloques-agua",
+    id: "bachiller-agua",
     fase: 1,
-    tipo: "Construcción · Agua",
-    pregunta: "El río cerca de la comunidad está sucio por aguas usadas. ¿Qué solución escogerías?",
-    contexto: "Piensa en una solución que limpie el agua antes de devolverla al ambiente.",
+    tipo: "Fase 1 · Gestión integral del agua",
+    pregunta: "Una localidad descarga aguas residuales a un río y quiere reutilizar parte del recurso. ¿Qué propuesta se acerca más a una gestión integral del agua?",
+    contexto: "Una solución completa debe considerar el tipo de contaminación, el uso posterior del agua y la verificación de su calidad.",
+    palabrasClave: ["caracterización", "tratamiento", "reúso seguro"],
+    concepto: "Gestión sostenible del agua",
     opciones: [
-      {
-        icono: "💧", titulo: "Tratar el agua", texto: "Limpiar el agua usada y reutilizar parte de ella antes de devolverla al río.", costo: "🪙 -170 · ⚡ -8",
-        correcta: true, equilibrio: { ambiental: 14, social: 8, economica: 5 }, recursos: { creditos: -170, agua: 15, energia: -8, comunidad: 7 }
-      },
-      {
-        icono: "➡️", titulo: "Mandarla más lejos", texto: "Mover la tubería para que la contaminación quede lejos de las casas.", costo: "🪙 -40",
-        correcta: false, equilibrio: { ambiental: -14, social: -8, economica: -3 }, recursos: { creditos: -40, agua: -15, comunidad: -8 }
-      },
-      {
-        icono: "🙈", titulo: "No hacer nada", texto: "Seguir usando el río igual aunque el agua esté contaminada.", costo: "💧 -20",
-        correcta: false, equilibrio: { ambiental: -16, social: -8, economica: -3 }, recursos: { agua: -20, comunidad: -6 }
-      }
+      { titulo: "Caracterizar, tratar, reutilizar y monitorear",
+        texto: "Analizar la calidad del efluente, aplicar tratamiento según el riesgo, definir usos compatibles y monitorear antes del reúso o descarga.",
+        clave: "calidad · tratamiento · control", correcta: true,
+        equilibrio: { ambiental: 14, social: 10, economica: 8 } },
+      { titulo: "Aplicar filtración y desinfección general",
+        texto: "Usar filtros y desinfectantes para mejorar el agua y reutilizarla en actividades municipales que no requieran consumo humano.",
+        clave: "filtración · desinfección", correcta: false,
+        equilibrio: { ambiental: 7, social: 6, economica: 6 } },
+      { titulo: "Construir una descarga más alejada del poblado",
+        texto: "Mover el punto de descarga río abajo y establecer una zona de amortiguamiento para reducir el contacto directo con la población.",
+        clave: "reubicar · amortiguar", correcta: false,
+        equilibrio: { ambiental: -7, social: 1, economica: 4 } },
+      { titulo: "Diluir el efluente antes de reutilizarlo",
+        texto: "Mezclar el agua residual con agua de mejor calidad para reducir concentraciones y destinarla a riego de áreas verdes.",
+        clave: "dilución · riego", correcta: false,
+        equilibrio: { ambiental: -5, social: 2, economica: 5 } }
     ],
-    explicacion: "Tratar el agua ayuda a reducir la contaminación y permite aprovechar mejor este recurso."
+    explicacion: "La gestión integral no depende de que el agua se vea limpia. Requiere caracterizar contaminantes, tratar según el riesgo, definir un reúso compatible y comprobar la calidad mediante monitoreo."
   },
   {
-    id: "bloques-territorio",
+    id: "bachiller-territorio",
     fase: 1,
-    tipo: "Construcción · Elegir el lugar",
-    pregunta: "Van a construir casas. Antes revisan si la zona se inunda, si hay agua y qué necesita la gente. ¿Qué están tomando en cuenta?",
-    contexto: "Piensa en el lugar donde se construirá y en sus características.",
+    tipo: "Fase 1 · Planeación territorial",
+    pregunta: "Se proyecta vivienda nueva en una zona con crecimiento urbano rápido y antecedentes de inundación. ¿Qué criterio debería tener mayor peso antes de autorizar el proyecto?",
+    contexto: "La dimensión geográfica integra riesgos, servicios, condiciones ecológicas y necesidades de la población.",
+    palabrasClave: ["ordenamiento", "vulnerabilidad", "servicios"],
+    concepto: "Dimensión geográfica",
     opciones: [
-      { icono: "🌿", titulo: "Solo el ambiente", texto: "Revisar únicamente plantas y animales.", costo: "", correcta: false, equilibrio: { ambiental: -2 }, recursos: {} },
-      { icono: "👥", titulo: "Solo a las personas", texto: "Revisar únicamente lo que quiere la comunidad.", costo: "", correcta: false, equilibrio: { social: -2 }, recursos: {} },
-      { icono: "🗺️", titulo: "El territorio", texto: "Revisar riesgos, recursos y necesidades del lugar antes de construir.", costo: "+150 XP", correcta: true, equilibrio: { ambiental: 6, social: 6, economica: 6 }, recursos: { comunidad: 4 } },
-      { icono: "💰", titulo: "Solo el dinero", texto: "Elegir únicamente el terreno más barato.", costo: "", correcta: false, equilibrio: { economica: -2 }, recursos: {} }
+      { titulo: "Evaluación territorial multicriterio",
+        texto: "Cruzar mapas de riesgo, capacidad de servicios, movilidad, disponibilidad de agua, funciones ecológicas y necesidades sociales antes de decidir la ubicación.",
+        clave: "territorio · riesgo · capacidad", correcta: true,
+        equilibrio: { ambiental: 10, social: 11, economica: 8 } },
+      { titulo: "Diseño hidráulico reforzado",
+        texto: "Mantener el sitio previsto y exigir drenaje de mayor capacidad, bombeo y obras de protección para disminuir la exposición a inundaciones.",
+        clave: "infraestructura · protección", correcta: false,
+        equilibrio: { ambiental: 2, social: 6, economica: -2 } },
+      { titulo: "Ubicación en el punto de mayor elevación",
+        texto: "Mover el proyecto al terreno más alto disponible, aunque implique mayor distancia de transporte, escuelas y redes de servicios.",
+        clave: "elevación · seguridad", correcta: false,
+        equilibrio: { ambiental: 3, social: -3, economica: -2 } },
+      { titulo: "Selección por costo total de construcción",
+        texto: "Elegir el terreno con menor costo de adquisición y destinar el ahorro a infraestructura para reducir riesgos posteriores.",
+        clave: "costo · compensación", correcta: false,
+        equilibrio: { ambiental: -3, social: 2, economica: 5 } }
     ],
-    explicacion: "Eso se llama dimensión geográfica: tomar en cuenta el territorio, sus riesgos, recursos y necesidades."
+    explicacion: "La planeación territorial sustentable no compensa un sitio inadecuado únicamente con obras. Integra riesgo, recursos, servicios, movilidad y población desde la selección del lugar."
   },
-
   {
-    id: "mision-precaucion",
+    id: "bachiller-precaucion",
     fase: 2,
-    tipo: "Misión rápida · Cuidar antes de dañar",
-    pregunta: "Quieren hacer un proyecto cerca de un bosque, pero todavía no saben si podría dañarlo. ¿Qué harías?",
-    contexto: "Elige la opción más segura para evitar un daño difícil de reparar.",
+    tipo: "Fase 2 · Principio de precaución",
+    pregunta: "Una empresa quiere introducir una sustancia nueva cerca de un humedal. Los beneficios económicos son claros, pero la evidencia científica todavía no descarta daños graves y persistentes. ¿Qué decisión aplica mejor el principio de precaución?",
+    contexto: "El principio no exige certeza absoluta para actuar, pero tampoco significa prohibir automáticamente cualquier innovación.",
+    palabrasClave: ["incertidumbre", "daño grave", "medidas preventivas"],
+    concepto: "Principio de precaución",
     opciones: [
-      { icono: "🛡️", titulo: "Revisar y prevenir", texto: "Estudiar el riesgo y poner medidas de protección antes de empezar.", costo: "+150 XP", correcta: true, equilibrio: { ambiental: 12, social: 5 }, recursos: { comunidad: 6 } },
-      { icono: "🎲", titulo: "Probar y ver qué pasa", texto: "Empezar el proyecto y actuar solo si después ocurre un daño.", costo: "Riesgo alto", correcta: false, equilibrio: { ambiental: -10, social: -5 }, recursos: { comunidad: -8 } },
-      { icono: "💸", titulo: "Pensar solo en el dinero", texto: "Aceptar el proyecto porque dará ganancias aunque no se conozca bien el riesgo.", costo: "🪙 +60", correcta: false, equilibrio: { ambiental: -12, social: -6, economica: 2 }, recursos: { creditos: 60, comunidad: -7 } }
+      { titulo: "Condicionar el proyecto a evaluación y controles preventivos",
+        texto: "Exigir estudios independientes, límites de uso, monitoreo y medidas reversibles antes de ampliar la operación mientras persista la incertidumbre relevante.",
+        clave: "evaluar · prevenir · monitorear", correcta: true,
+        equilibrio: { ambiental: 13, social: 8, economica: 6 } },
+      { titulo: "Autorizar con un fondo de compensación ambiental",
+        texto: "Permitir el proyecto si la empresa reserva recursos suficientes para restauración y reparación en caso de que aparezcan daños posteriores.",
+        clave: "compensar · reparar", correcta: false,
+        equilibrio: { ambiental: 1, social: 3, economica: 8 } },
+      { titulo: "Autorizar una prueba comercial de escala reducida",
+        texto: "Iniciar una operación menor para obtener evidencia real y suspenderla únicamente si el monitoreo detecta afectaciones claras al humedal.",
+        clave: "probar · reaccionar", correcta: false,
+        equilibrio: { ambiental: 3, social: 3, economica: 7 } },
+      { titulo: "Prohibir cualquier uso de la sustancia",
+        texto: "Cancelar de forma permanente la propuesta porque toda incertidumbre científica implica que el riesgo ambiental es inaceptable.",
+        clave: "prohibición · incertidumbre", correcta: false,
+        equilibrio: { ambiental: 8, social: 2, economica: -7 } }
     ],
-    explicacion: "Esto se llama principio de precaución: si algo puede causar un daño grave, es mejor prevenir antes de arriesgarse."
+    explicacion: "La precaución permite adoptar medidas proporcionales ante riesgo grave aun cuando exista incertidumbre. La respuesta más sólida combina evaluación, prevención, límites y monitoreo."
   },
   {
-    id: "mision-ods6",
+    id: "bachiller-interdependencia",
     fase: 2,
-    tipo: "Misión 2030 · Encuentra el ODS",
-    pregunta: "En una colonia falta agua limpia y un buen sistema de drenaje. ¿Qué ODS se relaciona más con este problema?",
-    contexto: "Busca el objetivo que habla directamente de agua y saneamiento.",
+    tipo: "Fase 2 · Interdependencia y capacidad de carga",
+    pregunta: "Un destino turístico costero genera empleo, pero en temporada alta aumenta la extracción de agua, los residuos y la presión sobre manglares. ¿Qué evaluación refleja mejor la sustentabilidad del proyecto?",
+    contexto: "El análisis debe reconocer que economía, sociedad y ecosistemas están conectados y tienen límites.",
+    palabrasClave: ["capacidad de carga", "interdependencia", "límites"],
+    concepto: "Interdependencia y capacidad de carga",
     opciones: [
-      { icono: "3️⃣", titulo: "ODS 3 · Salud y bienestar", texto: "Busca que las personas tengan una vida sana.", costo: "", correcta: false, equilibrio: { social: -2 }, recursos: {} },
-      { icono: "6️⃣", titulo: "ODS 6 · Agua limpia y saneamiento", texto: "Busca que todas las personas tengan agua segura y saneamiento.", costo: "+150 XP", correcta: true, equilibrio: { ambiental: 8, social: 10 }, recursos: { agua: 10, comunidad: 5 } },
-      { icono: "1️⃣3️⃣", titulo: "ODS 13 · Acción por el clima", texto: "Busca actuar frente al cambio climático.", costo: "", correcta: false, equilibrio: { ambiental: -2 }, recursos: {} }
+      { titulo: "Definir límites con indicadores ambientales, sociales y económicos",
+        texto: "Estimar disponibilidad de agua, residuos, estado de ecosistemas, empleo y bienestar local para fijar una capacidad operativa y revisarla periódicamente.",
+        clave: "límites · indicadores · revisión", correcta: true,
+        equilibrio: { ambiental: 12, social: 9, economica: 9 } },
+      { titulo: "Mantener el crecimiento mientras cumpla la normativa",
+        texto: "Permitir nuevas inversiones siempre que cada establecimiento tenga permisos vigentes y cumpla individualmente las normas ambientales aplicables.",
+        clave: "cumplimiento · crecimiento", correcta: false,
+        equilibrio: { ambiental: 1, social: 5, economica: 10 } },
+      { titulo: "Priorizar la conservación del manglar",
+        texto: "Limitar nuevas obras cerca de ecosistemas sensibles y concentrar el crecimiento turístico en áreas que ya estén urbanizadas.",
+        clave: "conservación · zonificación", correcta: false,
+        equilibrio: { ambiental: 10, social: 3, economica: 2 } },
+      { titulo: "Medir principalmente empleo e ingreso local",
+        texto: "Usar generación de empleo, recaudación y derrama económica como indicadores principales y atender impactos ambientales mediante compensaciones.",
+        clave: "empleo · compensación", correcta: false,
+        equilibrio: { ambiental: -4, social: 6, economica: 11 } }
     ],
-    explicacion: "El ODS 6 trata sobre agua limpia y saneamiento. Por eso es el que mejor responde a este problema."
+    explicacion: "La capacidad de carga considera límites acumulativos. No basta evaluar cada negocio por separado: deben analizarse simultáneamente agua, residuos, ecosistemas, empleo y bienestar."
   },
   {
-    id: "mision-ods13",
+    id: "bachiller-ods",
     fase: 2,
-    tipo: "Misión 2030 · Cambio climático",
-    pregunta: "¿Cuál de estas acciones ayuda más a enfrentar el cambio climático?",
-    contexto: "Piensa en cómo contaminar menos y también prepararnos para calor, sequías o lluvias fuertes.",
+    tipo: "Fase 2 · ODS integrados",
+    pregunta: "Un municipio enfrenta agua intermitente, descargas sin tratamiento, inundaciones urbanas y olas de calor. ¿Qué programa vincula de forma más coherente los ODS 6, 11 y 13?",
+    contexto: "Busca una intervención que conecte agua y saneamiento, ciudades resilientes y acción climática.",
+    palabrasClave: ["ODS 6", "ODS 11", "ODS 13"],
+    concepto: "Integración de los ODS",
     opciones: [
-      { icono: "🌡️", titulo: "Contaminar menos y prepararnos", texto: "Ahorrar energía, usar opciones más limpias y prepararse para calor o inundaciones.", costo: "+150 XP", correcta: true, equilibrio: { ambiental: 12, social: 6, economica: 4 }, recursos: { energia: 6, comunidad: 4 } },
-      { icono: "🛍️", titulo: "Usar más desechables", texto: "Comprar más productos que se tiran después de usarlos una sola vez.", costo: "", correcta: false, equilibrio: { ambiental: -10, economica: -3 }, recursos: { creditos: -30 } },
-      { icono: "🏭", titulo: "Quemar más combustibles", texto: "Usar más gasolina, carbón o petróleo para producir energía.", costo: "⚡ +15", correcta: false, equilibrio: { ambiental: -15, social: -4 }, recursos: { energia: 15, comunidad: -4 } }
+      { titulo: "Gestión hídrica + infraestructura verde + adaptación climática",
+        texto: "Reducir fugas, tratar aguas residuales, recuperar superficies permeables, mejorar alertas y ampliar sombra y eficiencia energética en zonas vulnerables.",
+        clave: "agua · resiliencia · clima", correcta: true,
+        equilibrio: { ambiental: 13, social: 13, economica: 7 } },
+      { titulo: "Ampliación de redes de agua y drenaje",
+        texto: "Invertir en tuberías, almacenamiento y drenaje pluvial para mejorar continuidad del servicio y reducir encharcamientos en las zonas urbanas.",
+        clave: "infraestructura · agua", correcta: false,
+        equilibrio: { ambiental: 6, social: 10, economica: 5 } },
+      { titulo: "Programa municipal de energía limpia",
+        texto: "Instalar paneles solares en edificios públicos, sustituir luminarias y promover movilidad eléctrica para reducir emisiones locales.",
+        clave: "mitigación · energía", correcta: false,
+        equilibrio: { ambiental: 10, social: 4, economica: 6 } },
+      { titulo: "Plan de protección civil y refugios temporales",
+        texto: "Fortalecer alertas, rutas de evacuación y centros de atención para responder a inundaciones y olas de calor durante emergencias.",
+        clave: "respuesta · adaptación", correcta: false,
+        equilibrio: { ambiental: 3, social: 11, economica: 3 } }
     ],
-    explicacion: "Reducir la contaminación ayuda a frenar el cambio climático. Prepararnos para sus efectos se llama adaptación."
-  },
-
-  {
-    id: "supervivencia-calor",
-    fase: 3,
-    tipo: "Evento crítico · Mucho calor",
-    pregunta: "Hace muchísimo calor y casi no hay sombra en la comunidad. ¿Qué harías?",
-    contexto: "Tienes 30 segundos. Elige una opción que ayude a proteger a las personas del calor.",
-    tiempo: 30,
-    opciones: [
-      { icono: "🌳", titulo: "Plantar árboles y crear sombra", texto: "Hacer zonas verdes y lugares con sombra para caminar y descansar.", costo: "🪙 -90 · 💧 -5", correcta: true, equilibrio: { ambiental: 10, social: 10, economica: 3 }, recursos: { creditos: -90, agua: -5, comunidad: 10 } },
-      { icono: "🅿️", titulo: "Hacer más estacionamientos", texto: "Quitar áreas verdes para poner más piso y concreto.", costo: "🪙 -70", correcta: false, equilibrio: { ambiental: -12, social: -6, economica: -2 }, recursos: { creditos: -70, comunidad: -7 } },
-      { icono: "🙈", titulo: "Esperar a que pase", texto: "No hacer nada y esperar a que baje la temperatura.", costo: "❤️ -15", correcta: false, equilibrio: { social: -10, ambiental: -4 }, recursos: { comunidad: -15, agua: -8 } }
-    ],
-    explicacion: "Los árboles y la sombra ayudan a proteger a las personas del calor. Prepararse para un problema climático se llama adaptación.",
-    timeout: { equilibrio: { ambiental: -5, social: -10 }, recursos: { comunidad: -15, agua: -10 } }
-  },
-  {
-    id: "supervivencia-inundacion",
-    fase: 3,
-    tipo: "Evento crítico · Lluvia fuerte",
-    pregunta: "Llueve muchísimo y varias casas pueden inundarse. ¿Qué harías?",
-    contexto: "Tienes 30 segundos. Primero piensa en proteger a las personas y luego en reducir el riesgo para la próxima vez.",
-    tiempo: 30,
-    opciones: [
-      { icono: "🌧️", titulo: "Alertar y prevenir", texto: "Avisar a la gente, usar rutas seguras y mejorar zonas donde el agua pueda filtrarse.", costo: "🪙 -120 · ⚡ -5", correcta: true, equilibrio: { ambiental: 8, social: 12, economica: 5 }, recursos: { creditos: -120, energia: -5, comunidad: 12 } },
-      { icono: "🏘️", titulo: "Construir más ahí", texto: "Hacer más casas en la zona porque el terreno es barato.", costo: "🪙 +70", correcta: false, equilibrio: { ambiental: -7, social: -14, economica: -5 }, recursos: { creditos: 70, comunidad: -18 } },
-      { icono: "🧱", titulo: "Poner un muro y ya", texto: "Construir una sola barrera sin revisar drenaje, terreno ni zonas de riesgo.", costo: "🪙 -160", correcta: false, equilibrio: { ambiental: -4, social: -6, economica: -7 }, recursos: { creditos: -160, comunidad: -6 } }
-    ],
-    explicacion: "Una buena respuesta combina avisos, rutas seguras y cambios en el lugar para que una futura lluvia cause menos daño.",
-    timeout: { equilibrio: { social: -12, economica: -5 }, recursos: { comunidad: -18, creditos: -60 } }
+    explicacion: "Los ODS son interdependientes. La respuesta más completa atiende simultáneamente acceso y saneamiento del agua, resiliencia urbana y mitigación/adaptación climática."
   },
   {
-    id: "supervivencia-bosque",
+    id: "bachiller-calor",
     fase: 3,
-    tipo: "Evento final · Incendio forestal",
-    pregunta: "Después de apagar un incendio en el bosque, ¿qué conviene hacer?",
-    contexto: "Tienes 30 segundos. Piensa en cómo recuperar el bosque y evitar otro incendio.",
-    tiempo: 30,
+    tipo: "Fase 3 · Ola de calor",
+    pregunta: "Una ciudad registra noches cada vez más cálidas y aumento de golpes de calor en zonas con poca vegetación. ¿Qué estrategia reduce mejor la vulnerabilidad sin depender únicamente del aire acondicionado?",
+    contexto: "Tienes 60 segundos. Considera exposición, población vulnerable y características del entorno urbano.",
+    palabrasClave: ["vulnerabilidad", "isla de calor", "adaptación"],
+    concepto: "Adaptación al calor extremo",
     opciones: [
-      { icono: "🌲", titulo: "Recuperar y prevenir", texto: "Reforestar, cuidar el área, prevenir nuevos incendios e involucrar a la comunidad.", costo: "🪙 -130 · 💧 -8", correcta: true, equilibrio: { ambiental: 15, social: 8, economica: 6 }, recursos: { creditos: -130, agua: -8, comunidad: 10 } },
-      { icono: "🪵", titulo: "Sacar toda la madera", texto: "Aprovechar lo que quede sin hacer un plan para recuperar el bosque.", costo: "🪙 +110", correcta: false, equilibrio: { ambiental: -16, social: -5, economica: 4 }, recursos: { creditos: 110, comunidad: -6 } },
-      { icono: "🏗️", titulo: "Construir encima", texto: "Usar la zona quemada para hacer edificios porque ya perdió árboles.", costo: "🪙 +150", correcta: false, equilibrio: { ambiental: -18, social: -6, economica: 3 }, recursos: { creditos: 150, comunidad: -8 } }
+      { titulo: "Sistema de alerta + refugios + sombra + reducción de isla de calor",
+        texto: "Mapear población vulnerable, activar alertas, habilitar espacios frescos, aumentar arbolado y sombra y usar superficies que acumulen menos calor.",
+        clave: "vulnerabilidad · entorno · alerta", correcta: true,
+        equilibrio: { ambiental: 10, social: 14, economica: 6 } },
+      { titulo: "Ampliar climatización en edificios públicos",
+        texto: "Instalar equipos de aire acondicionado de alta eficiencia en escuelas, centros de salud y oficinas para disponer de espacios seguros durante eventos extremos.",
+        clave: "refrigeración · refugio", correcta: false,
+        equilibrio: { ambiental: 1, social: 10, economica: -2 } },
+      { titulo: "Modificar horarios escolares y laborales",
+        texto: "Reducir actividades entre las 12:00 y 16:00 y desplazar tareas al exterior hacia primeras horas de la mañana y al final de la tarde.",
+        clave: "exposición · horarios", correcta: false,
+        equilibrio: { ambiental: 1, social: 9, economica: 3 } },
+      { titulo: "Programa masivo de arborización urbana",
+        texto: "Priorizar plantación de árboles en calles y parques para aumentar sombra y evapotranspiración en zonas con temperaturas elevadas.",
+        clave: "arbolado · sombra", correcta: false,
+        equilibrio: { ambiental: 9, social: 6, economica: 3 } }
     ],
-    explicacion: "Recuperar el bosque y prevenir nuevos incendios ayuda a cuidar animales, plantas, agua y también a la comunidad.",
-    timeout: { equilibrio: { ambiental: -15, social: -6 }, recursos: { comunidad: -10, agua: -8 } }
+    explicacion: "La adaptación efectiva combina información, atención a grupos vulnerables y cambios físicos del entorno. Una sola medida puede ayudar, pero no cubre todas las fuentes de vulnerabilidad.",
+    timeout: { equilibrio: { social: -10, economica: -3, ambiental: -3 } }
+  },
+  {
+    id: "bachiller-inundacion",
+    fase: 3,
+    tipo: "Fase 3 · Inundación urbana",
+    pregunta: "Un barrio se inunda varias veces al año porque el drenaje se satura y gran parte del suelo está impermeabilizado. ¿Qué estrategia es más consistente con una gestión integral del riesgo?",
+    contexto: "Tienes 60 segundos. Distingue entre reducir el peligro, reducir la exposición y mejorar la capacidad de respuesta.",
+    palabrasClave: ["prevención", "infiltración", "ordenamiento"],
+    concepto: "Gestión integral del riesgo",
+    opciones: [
+      { titulo: "Alertas + mantenimiento + infiltración + control de nuevas construcciones",
+        texto: "Mejorar avisos y rutas, mantener drenajes, recuperar áreas permeables y humedales y evitar nuevas viviendas en sectores de alto riesgo.",
+        clave: "respuesta · naturaleza · territorio", correcta: true,
+        equilibrio: { ambiental: 11, social: 14, economica: 7 } },
+      { titulo: "Ampliar la capacidad del drenaje pluvial",
+        texto: "Construir colectores y estaciones de bombeo de mayor capacidad para desalojar más rápido los volúmenes de lluvia durante tormentas intensas.",
+        clave: "infraestructura · desalojo", correcta: false,
+        equilibrio: { ambiental: 2, social: 9, economica: 3 } },
+      { titulo: "Construir bordos y muros de protección",
+        texto: "Crear barreras en los puntos de entrada del agua y elevar vialidades estratégicas para mantener operativa la zona durante las inundaciones.",
+        clave: "contención · protección", correcta: false,
+        equilibrio: { ambiental: 1, social: 8, economica: 1 } },
+      { titulo: "Fortalecer seguros y fondos de recuperación",
+        texto: "Crear mecanismos financieros para reparar viviendas e infraestructura más rápido después de cada inundación y reducir pérdidas económicas familiares.",
+        clave: "recuperación · finanzas", correcta: false,
+        equilibrio: { ambiental: 0, social: 6, economica: 8 } }
+    ],
+    explicacion: "La gestión integral combina prevención, adaptación territorial, mantenimiento, soluciones basadas en la naturaleza y preparación. Aumentar drenaje por sí solo no elimina exposición ni vulnerabilidad.",
+    timeout: { equilibrio: { social: -12, economica: -5, ambiental: -4 } }
+  },
+  {
+    id: "bachiller-incendio",
+    fase: 3,
+    tipo: "Fase 3 · Restauración después de incendio",
+    pregunta: "Después de un incendio forestal de alta intensidad, ¿qué criterio debería orientar la restauración para evitar que la intervención cause nuevos daños?",
+    contexto: "Tienes 60 segundos. Restaurar no significa simplemente plantar el mayor número de árboles posible.",
+    palabrasClave: ["severidad", "regeneración", "especies nativas"],
+    concepto: "Restauración ecológica",
+    opciones: [
+      { titulo: "Diagnóstico de severidad y restauración adaptativa",
+        texto: "Evaluar suelo y regeneración natural, proteger zonas frágiles, favorecer especies nativas, controlar erosión y combustibles y monitorear la recuperación.",
+        clave: "diagnóstico · nativas · seguimiento", correcta: true,
+        equilibrio: { ambiental: 15, social: 8, economica: 6 } },
+      { titulo: "Reforestación rápida con especies de crecimiento acelerado",
+        texto: "Cubrir pronto las áreas quemadas con especies de rápido crecimiento para recuperar biomasa y reducir la pérdida visual de vegetación.",
+        clave: "rapidez · cobertura", correcta: false,
+        equilibrio: { ambiental: 4, social: 4, economica: 5 } },
+      { titulo: "Retiro generalizado de madera y material quemado",
+        texto: "Extraer troncos y residuos para disminuir combustible disponible y preparar el terreno para una reforestación ordenada durante la siguiente temporada.",
+        clave: "extracción · combustible", correcta: false,
+        equilibrio: { ambiental: -5, social: 2, economica: 7 } },
+      { titulo: "Excluir toda intervención durante varios años",
+        texto: "Cerrar el área y permitir que los procesos naturales actúen sin manejo, monitoreo o participación humana hasta recuperar cobertura suficiente.",
+        clave: "regeneración · no intervención", correcta: false,
+        equilibrio: { ambiental: 5, social: -2, economica: -1 } }
+    ],
+    explicacion: "La restauración debe responder a la severidad y al estado del sitio. Algunas áreas pueden regenerarse solas y otras requieren intervención; por eso se necesita diagnóstico, especies apropiadas, control de erosión y seguimiento.",
+    timeout: { equilibrio: { ambiental: -12, social: -5, economica: -3 } }
   }
 ];
 
-const estado = document.querySelector("#estado-juego");
-const bloqueado = document.querySelector("#juego-bloqueado");
 const autorizado = document.querySelector("#juego-autorizado");
 const pantallaInicio = document.querySelector("#pantalla-inicio");
 const pantallaFase = document.querySelector("#pantalla-fase");
 const pantallaJuego = document.querySelector("#pantalla-juego");
 const pantallaFinal = document.querySelector("#pantalla-final");
+const datosJugador = document.querySelector("#datos-jugador");
 const jugadorNombre = document.querySelector("#jugador-nombre");
 const jugadorEscuela = document.querySelector("#jugador-escuela");
 const notaAdmin = document.querySelector("#nota-admin");
 const comenzar = document.querySelector("#comenzar-juego");
 const entrarFase = document.querySelector("#entrar-fase");
 const reintentar = document.querySelector("#reintentar-juego");
+const dialogoRegistro = document.querySelector("#dialogo-registro-juego");
+const formularioRegistro = document.querySelector("#formulario-registro-juego");
+const cerrarRegistro = document.querySelector("#cerrar-registro-juego");
+const cancelarRegistro = document.querySelector("#cancelar-registro-juego");
+const nombreRegistro = document.querySelector("#nombre-juego");
+const escuelaRegistro = document.querySelector("#escuela-juego");
+const campoActividad = document.querySelector("#campo-actividad-juego");
+const actividadRegistro = document.querySelector("#actividad-juego");
+const errorRegistro = document.querySelector("#error-registro-juego");
 
 const chipFase = document.querySelector("#chip-fase");
 const contadorReto = document.querySelector("#contador-reto");
@@ -207,31 +331,16 @@ const barraProgreso = document.querySelector("#barra-progreso");
 const tipoReto = document.querySelector("#tipo-reto");
 const preguntaReto = document.querySelector("#pregunta-reto");
 const contextoReto = document.querySelector("#contexto-reto");
+const palabrasClave = document.querySelector("#palabras-clave");
 const opcionesReto = document.querySelector("#opciones-reto");
 const feedback = document.querySelector("#feedback-reto");
 const continuar = document.querySelector("#continuar-reto");
-
-const valorAmbiental = document.querySelector("#valor-ambiental");
-const valorSocial = document.querySelector("#valor-social");
-const valorEconomica = document.querySelector("#valor-economica");
-const barraAmbiental = document.querySelector("#barra-ambiental");
-const barraSocial = document.querySelector("#barra-social");
-const barraEconomica = document.querySelector("#barra-economica");
-const mundoGrid = document.querySelector("#mundo-grid");
-const mundoClima = document.querySelector("#mundo-clima");
-const estadoComunidad = document.querySelector("#estado-comunidad");
-const nivelComunidad = document.querySelector("#nivel-comunidad");
-
-const recursoCreditos = document.querySelector("#recurso-creditos");
-const recursoAgua = document.querySelector("#recurso-agua");
-const recursoEnergia = document.querySelector("#recurso-energia");
-const recursoComunidad = document.querySelector("#recurso-comunidad");
-
 const temporizador = document.querySelector("#temporizador");
 const tiempoRestanteElemento = document.querySelector("#tiempo-restante");
 const pausarTiempo = document.querySelector("#pausar-tiempo");
 
 let sesion = null;
+let misionesPartida = [];
 let indice = 0;
 let correctas = 0;
 let puntos = 0;
@@ -239,11 +348,12 @@ let racha = 0;
 let respondido = false;
 let detalleRespuestas = [];
 let equilibrio = { ambiental: 45, social: 45, economica: 45 };
-let recursos = { creditos: 600, agua: 100, energia: 100, comunidad: 100 };
 let fasePendiente = 1;
 let intervaloTiempo = null;
 let tiempoRestante = 0;
 let tiempoPausado = false;
+let ultimaPosicionCorrecta = -1;
+let registrandoJugador = false;
 
 function leerJSON(storage, clave) {
   try {
@@ -258,8 +368,35 @@ function limitar(valor, minimo = 0, maximo = 100) {
   return Math.max(minimo, Math.min(maximo, valor));
 }
 
-function mostrarSolo(elemento) {
-  [estado, bloqueado, autorizado].forEach((el) => { el.hidden = el !== elemento; });
+function normalizar(texto = "") {
+  return texto.trim().replace(/\s+/g, " ");
+}
+
+function actualizarDatosJugador() {
+  if (!sesion) {
+    datosJugador.hidden = true;
+    notaAdmin.hidden = true;
+    return;
+  }
+
+  jugadorNombre.textContent = sesion.nombre || "Participante";
+  jugadorEscuela.textContent = sesion.escuela === "Otro" && sesion.actividad
+    ? sesion.actividad
+    : (sesion.escuela || "—");
+  datosJugador.hidden = false;
+  notaAdmin.hidden = sesion.tipo !== "admin";
+}
+
+function abrirRegistroJuego() {
+  errorRegistro.textContent = "";
+  if (typeof dialogoRegistro.showModal === "function") dialogoRegistro.showModal();
+  else dialogoRegistro.setAttribute("open", "");
+  nombreRegistro.focus();
+}
+
+function cerrarRegistroJuego() {
+  if (dialogoRegistro.open && typeof dialogoRegistro.close === "function") dialogoRegistro.close();
+  else dialogoRegistro.removeAttribute("open");
 }
 
 function mostrarPantalla(elemento) {
@@ -270,116 +407,53 @@ function promedioEquilibrio() {
   return Math.round((equilibrio.ambiental + equilibrio.social + equilibrio.economica) / 3);
 }
 
-function actualizarRecursos() {
-  recursoCreditos.textContent = recursos.creditos;
-  recursoAgua.textContent = recursos.agua;
-  recursoEnergia.textContent = recursos.energia;
-  recursoComunidad.textContent = recursos.comunidad;
-
-  [
-    [recursoCreditos.closest(".recurso"), recursos.creditos, 120],
-    [recursoAgua.closest(".recurso"), recursos.agua, 25],
-    [recursoEnergia.closest(".recurso"), recursos.energia, 25],
-    [recursoComunidad.closest(".recurso"), recursos.comunidad, 35]
-  ].forEach(([elemento, valor, umbral]) => elemento?.classList.toggle("critico", valor <= umbral));
-}
-
-function construirMundo() {
-  const promedio = promedioEquilibrio();
-  let piezas;
-  let clima;
-  let estadoTexto;
-  let nivelTexto;
-
-  if (promedio >= 80 && recursos.comunidad >= 60) {
-    piezas = ["🌳", "🏡", "☀️", "🌳", "🚲", "💧", "🌱", "🏫", "♻️", "🏠", "🌻", "🌳", "💧", "🌿", "🏡", "🚲", "🌳", "☀️"];
-    clima = "☀️";
-    estadoTexto = "Comunidad resiliente y en equilibrio";
-    nivelTexto = "Nivel 4 · Mundo sustentable";
-  } else if (promedio >= 65) {
-    piezas = ["🌳", "🏠", "🌤️", "♻️", "🌱", "💧", "🏫", "🏠", "🚲", "🌿", "🏘️", "🌳", "💧", "🌱", "🏠", "♻️", "🌤️", "🌿"];
-    clima = "🌤️";
-    estadoTexto = "La comunidad está recuperando su equilibrio";
-    nivelTexto = "Nivel 3 · Zona en mejora";
-  } else if (promedio >= 50) {
-    piezas = ["🌿", "🏠", "🌥️", "🗑️", "🌱", "💧", "🏘️", "🏭", "🚲", "🌱", "🏚️", "🌳", "💧", "🗑️", "🏠", "🌥️", "🌿", "🏭"];
-    clima = "🌥️";
-    estadoTexto = "Hay avances, pero todavía existen riesgos";
-    nivelTexto = "Nivel 2 · Zona inestable";
-  } else {
-    piezas = ["🏭", "💨", "☁️", "🗑️", "🏚️", "🟫", "🏭", "💨", "🗑️", "🏚️", "🟫", "💧", "🗑️", "🏭", "🏚️", "💨", "🟫", "🗑️"];
-    clima = "☁️";
-    estadoTexto = "El territorio sigue en situación crítica";
-    nivelTexto = "Nivel 1 · Zona vulnerable";
-  }
-
-  mundoClima.textContent = clima;
-  estadoComunidad.textContent = estadoTexto;
-  nivelComunidad.textContent = nivelTexto;
-  mundoGrid.innerHTML = "";
-
-  piezas.forEach((pieza) => {
-    const bloque = document.createElement("span");
-    bloque.className = "bloque-mundo";
-    if (pieza === "💧") bloque.classList.add("agua");
-    if (["🏠", "🏡", "🏘️", "🏫", "🏭", "🚲", "♻️"].includes(pieza)) bloque.classList.add("urbano");
-    if (["💨", "🗑️", "🏚️", "🟫"].includes(pieza)) bloque.classList.add("alerta");
-    bloque.textContent = pieza;
-    mundoGrid.appendChild(bloque);
-  });
-}
-
-function actualizarEquilibrio() {
-  valorAmbiental.textContent = `${equilibrio.ambiental}%`;
-  valorSocial.textContent = `${equilibrio.social}%`;
-  valorEconomica.textContent = `${equilibrio.economica}%`;
-  barraAmbiental.style.width = `${equilibrio.ambiental}%`;
-  barraSocial.style.width = `${equilibrio.social}%`;
-  barraEconomica.style.width = `${equilibrio.economica}%`;
-  construirMundo();
-}
-
-function aplicarCambios(cambios = {}) {
-  const equilibrioCambios = cambios.equilibrio || {};
-  const recursosCambios = cambios.recursos || {};
-
-  Object.entries(equilibrioCambios).forEach(([clave, cantidad]) => {
+function aplicarImpacto(opcion = {}) {
+  Object.entries(opcion.equilibrio || {}).forEach(([clave, cantidad]) => {
     equilibrio[clave] = limitar(equilibrio[clave] + cantidad);
   });
-
-  Object.entries(recursosCambios).forEach(([clave, cantidad]) => {
-    const maximo = clave === "creditos" ? 9999 : 100;
-    recursos[clave] = limitar(recursos[clave] + cantidad, 0, maximo);
-  });
-
-  actualizarEquilibrio();
-  actualizarRecursos();
 }
 
-function describirCambios(opcion) {
-  const items = [];
-  const nombresEq = { ambiental: "🌿 Ambiente", social: "👥 Sociedad", economica: "💰 Economía" };
-  const nombresRec = { creditos: "🪙 Créditos", agua: "💧 Agua", energia: "⚡ Energía", comunidad: "❤️ Comunidad" };
+function mezclar(lista) {
+  const copia = [...lista];
+  for (let i = copia.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
 
-  Object.entries(opcion.equilibrio || {}).forEach(([clave, valor]) => {
-    items.push(`${nombresEq[clave]} ${valor > 0 ? "+" : ""}${valor}`);
-  });
-  Object.entries(opcion.recursos || {}).forEach(([clave, valor]) => {
-    items.push(`${nombresRec[clave]} ${valor > 0 ? "+" : ""}${valor}`);
-  });
-  return items;
+function prepararMisionesPartida() {
+  // Mantiene las tres etapas, pero cambia el orden de las preguntas dentro de cada una.
+  return fases.flatMap((fase) => mezclar(misiones.filter((mision) => mision.fase === fase.numero)));
+}
+
+function mezclarOpciones(opciones) {
+  const mezcladas = mezclar(opciones);
+  let posicionCorrecta = mezcladas.findIndex((opcion) => opcion.correcta);
+
+  // Evita que la respuesta correcta caiga en la misma posición en dos preguntas consecutivas.
+  if (mezcladas.length > 1 && posicionCorrecta === ultimaPosicionCorrecta) {
+    const candidatas = mezcladas.map((_, i) => i).filter((i) => i !== posicionCorrecta);
+    const nuevaPosicion = candidatas[Math.floor(Math.random() * candidatas.length)];
+    [mezcladas[posicionCorrecta], mezcladas[nuevaPosicion]] = [mezcladas[nuevaPosicion], mezcladas[posicionCorrecta]];
+    posicionCorrecta = nuevaPosicion;
+  }
+
+  ultimaPosicionCorrecta = posicionCorrecta;
+  return mezcladas;
 }
 
 function detenerTemporizador() {
   if (intervaloTiempo) clearInterval(intervaloTiempo);
   intervaloTiempo = null;
-  temporizador.hidden = true;
+  if (temporizador) temporizador.hidden = true;
   tiempoPausado = false;
-  pausarTiempo.textContent = "Pausar";
+  if (pausarTiempo) pausarTiempo.textContent = "Pausar";
 }
 
 function iniciarTemporizador(segundos, mision) {
   detenerTemporizador();
+  if (!temporizador || !tiempoRestanteElemento) return;
   temporizador.hidden = false;
   tiempoRestante = segundos;
   tiempoRestanteElemento.textContent = tiempoRestante;
@@ -399,7 +473,6 @@ function presentarFase(numeroFase) {
   detenerTemporizador();
   const fase = fases[numeroFase - 1];
   fasePendiente = numeroFase;
-  document.querySelector("#fase-presentacion-icono").textContent = fase.icono;
   document.querySelector("#fase-presentacion-numero").textContent = `Fase ${fase.numero} de ${fases.length}`;
   document.querySelector("#fase-presentacion-titulo").textContent = fase.nombre;
   document.querySelector("#fase-presentacion-texto").textContent = fase.texto;
@@ -414,10 +487,6 @@ function crearBotonOpcion(opcion, indiceOpcion, mision) {
   boton.className = "opcion-reto";
   boton.dataset.indice = String(indiceOpcion);
 
-  const icono = document.createElement("span");
-  icono.className = "opcion-icono";
-  icono.textContent = opcion.icono || "🎯";
-
   const contenido = document.createElement("span");
   contenido.className = "opcion-contenido";
   const titulo = document.createElement("strong");
@@ -426,13 +495,25 @@ function crearBotonOpcion(opcion, indiceOpcion, mision) {
   texto.textContent = opcion.texto;
   contenido.append(titulo, texto);
 
-  const costo = document.createElement("span");
-  costo.className = "opcion-costo";
-  costo.textContent = opcion.costo || "";
+  const clave = document.createElement("span");
+  clave.className = "opcion-costo opcion-clave";
+  clave.textContent = opcion.clave || "";
 
-  boton.append(icono, contenido, costo);
+  boton.append(contenido, clave);
   boton.addEventListener("click", () => responderOpcion(indiceOpcion, mision));
   return boton;
+}
+
+function renderizarPalabrasClave(mision) {
+  palabrasClave.innerHTML = "";
+  const titulo = document.createElement("strong");
+  titulo.textContent = "Criterios de análisis:";
+  palabrasClave.appendChild(titulo);
+  (mision.palabrasClave || []).forEach((palabra) => {
+    const chip = document.createElement("span");
+    chip.textContent = palabra;
+    palabrasClave.appendChild(chip);
+  });
 }
 
 function renderizarMision() {
@@ -443,21 +524,26 @@ function renderizarMision() {
   continuar.hidden = true;
   opcionesReto.innerHTML = "";
 
-  const mision = misiones[indice];
+  const mision = misionesPartida[indice];
   const fase = fases[mision.fase - 1];
   chipFase.textContent = fase.corto;
-  contadorReto.textContent = `Misión ${indice + 1} de ${misiones.length}`;
-  barraProgreso.style.width = `${(indice / misiones.length) * 100}%`;
+  contadorReto.textContent = `Misión ${indice + 1} de ${misionesPartida.length}`;
+  barraProgreso.style.width = `${(indice / misionesPartida.length) * 100}%`;
   tipoReto.textContent = mision.tipo;
   preguntaReto.textContent = mision.pregunta;
   contextoReto.textContent = mision.contexto || "";
   puntosElemento.textContent = puntos;
-  rachaElemento.textContent = `🔥 Racha ${racha}`;
+  rachaElemento.textContent = `Racha ${racha}`;
+  renderizarPalabrasClave(mision);
 
-  mision.opciones.forEach((opcion, i) => opcionesReto.appendChild(crearBotonOpcion(opcion, i, mision)));
+  // Baraja nuevamente las respuestas cada vez que se muestra el reto.
+  delete mision._opcionesActuales;
+  const opciones = mezclarOpciones(mision.opciones);
+  mision._opcionesActuales = opciones;
+  opciones.forEach((opcion, i) => opcionesReto.appendChild(crearBotonOpcion(opcion, i, mision)));
 
-  if (mision.tiempo) iniciarTemporizador(mision.tiempo, mision);
-  else detenerTemporizador();
+  // Todas las fases usan el mismo contador para mantener un ritmo de juego constante.
+  iniciarTemporizador(mision.tiempo || TIEMPO_POR_MISION, mision);
 }
 
 function registrarRespuesta(mision, opcion, acierto, respuesta, motivo = "respuesta") {
@@ -473,35 +559,25 @@ function registrarRespuesta(mision, opcion, acierto, respuesta, motivo = "respue
     racha = 0;
   }
 
-  aplicarCambios(opcion);
+  aplicarImpacto(opcion);
   puntosElemento.textContent = puntos;
-  rachaElemento.textContent = `🔥 Racha ${racha}`;
+  rachaElemento.textContent = `Racha ${racha}`;
   detalleRespuestas.push({
     id: mision.id,
     fase: mision.fase,
     correcta: acierto,
     respuesta,
-    motivo
+    motivo,
+    concepto: mision.concepto
   });
 
   feedback.hidden = false;
   feedback.classList.toggle("error", !acierto);
-  const cambios = describirCambios(opcion);
-  if (motivo === "tiempo") {
-    feedback.innerHTML = `<strong>⏱ Tiempo terminado</strong><span>No elegiste a tiempo. La comunidad tuvo que actuar sin tu decisión. ${mision.explicacion}</span>`;
-  } else {
-    feedback.innerHTML = `<strong>${acierto ? "✓ Misión superada" : "✕ Decisión de riesgo"}</strong><span>${mision.explicacion}</span>`;
-  }
 
-  if (cambios.length) {
-    const cont = document.createElement("div");
-    cont.className = "feedback-cambios";
-    cambios.forEach((cambio) => {
-      const chip = document.createElement("span");
-      chip.textContent = cambio;
-      cont.appendChild(chip);
-    });
-    feedback.appendChild(cont);
+  if (motivo === "tiempo") {
+    feedback.innerHTML = `<strong>Tiempo terminado</strong><span><b>Concepto clave: ${mision.concepto}.</b> ${mision.explicacion}</span>`;
+  } else {
+    feedback.innerHTML = `<strong>${acierto ? "✓ Análisis correcto" : "✕ Revisa el criterio"}</strong><span><b>Concepto clave: ${mision.concepto}.</b> ${mision.explicacion}</span>`;
   }
 
   continuar.hidden = false;
@@ -510,12 +586,13 @@ function registrarRespuesta(mision, opcion, acierto, respuesta, motivo = "respue
 
 function responderOpcion(indiceOpcion, mision) {
   if (respondido) return;
-  const opcion = mision.opciones[indiceOpcion];
+  const opciones = mision._opcionesActuales || mision.opciones;
+  const opcion = opciones[indiceOpcion];
   const acierto = Boolean(opcion.correcta);
 
   opcionesReto.querySelectorAll(".opcion-reto").forEach((boton) => {
     const valor = Number(boton.dataset.indice);
-    if (mision.opciones[valor]?.correcta) boton.classList.add("correcta");
+    if (opciones[valor]?.correcta) boton.classList.add("correcta");
     if (valor === indiceOpcion && !acierto) boton.classList.add("incorrecta");
   });
 
@@ -524,20 +601,16 @@ function responderOpcion(indiceOpcion, mision) {
 
 function resolverTiempoAgotado(mision) {
   if (respondido) return;
-  const penalizacion = {
-    equilibrio: mision.timeout?.equilibrio || { social: -8 },
-    recursos: mision.timeout?.recursos || { comunidad: -10 }
-  };
-  registrarRespuesta(mision, penalizacion, false, "Sin respuesta", "tiempo");
+  registrarRespuesta(mision, { equilibrio: mision.timeout?.equilibrio || { social: -8 } }, false, "Sin respuesta", "tiempo");
 }
 
 function obtenerRango(porcentaje, promedio) {
-  const combinado = Math.round((porcentaje * .7) + (promedio * .3));
-  if (combinado >= 90) return { nombre: "Maestro de la Sustentabilidad", icono: "🏆" };
-  if (combinado >= 80) return { nombre: "Guardián Ambiental", icono: "💎" };
-  if (combinado >= 60) return { nombre: "Agente del Cambio", icono: "♻️" };
-  if (combinado >= 40) return { nombre: "Explorador Sustentable", icono: "🌿" };
-  return { nombre: "Novato Verde", icono: "🌱" };
+  const combinado = Math.round((porcentaje * .8) + (promedio * .2));
+  if (combinado >= 90) return { nombre: "Maestro de la Sustentabilidad" };
+  if (combinado >= 80) return { nombre: "Guardián Ambiental" };
+  if (combinado >= 60) return { nombre: "Agente del Cambio" };
+  if (combinado >= 40) return { nombre: "Explorador Sustentable" };
+  return { nombre: "Novato Verde" };
 }
 
 async function guardarResultado(datos) {
@@ -559,14 +632,15 @@ async function guardarResultado(datos) {
       uid: sesion.uid,
       nombre: sesion.nombre,
       escuela: sesion.escuela,
+      actividad: sesion.actividad || "",
       juego: "EcoSurvival: Misión 2030",
+      nivel: "Bachillerato",
       correctas: datos.correctas,
-      total: misiones.length,
+      total: misionesPartida.length,
       porcentaje: datos.porcentaje,
       puntos: datos.puntos,
       insignia: datos.rango,
       equilibrio: { ...equilibrio },
-      recursos: { ...recursos },
       respuestas: detalleRespuestas,
       fecha: serverTimestamp()
     });
@@ -580,35 +654,30 @@ async function guardarResultado(datos) {
 function terminarJuego() {
   detenerTemporizador();
   barraProgreso.style.width = "100%";
-  const porcentaje = Math.round((correctas / misiones.length) * 100);
+  const porcentaje = Math.round((correctas / misionesPartida.length) * 100);
   const promedio = promedioEquilibrio();
   const rango = obtenerRango(porcentaje, promedio);
 
-  document.querySelector("#icono-insignia").textContent = rango.icono;
-  document.querySelector("#correctas-final").textContent = `${correctas}/${misiones.length}`;
+  document.querySelector("#correctas-final").textContent = `${correctas}/${misionesPartida.length}`;
   document.querySelector("#puntos-final").textContent = puntos;
   document.querySelector("#porcentaje-final").textContent = `${porcentaje}%`;
   document.querySelector("#insignia-final").textContent = rango.nombre;
   document.querySelector("#ambiental-final").textContent = `${equilibrio.ambiental}%`;
   document.querySelector("#social-final").textContent = `${equilibrio.social}%`;
   document.querySelector("#economica-final").textContent = `${equilibrio.economica}%`;
-  document.querySelector("#creditos-final").textContent = recursos.creditos;
-  document.querySelector("#agua-final").textContent = recursos.agua;
-  document.querySelector("#energia-final").textContent = recursos.energia;
-  document.querySelector("#comunidad-final").textContent = recursos.comunidad;
 
   const titulo = document.querySelector("#titulo-final");
   const mensaje = document.querySelector("#mensaje-final");
 
-  if (porcentaje >= 80 && promedio >= 70 && recursos.comunidad >= 45) {
-    titulo.textContent = "¡Mundo sustentable desbloqueado!";
-    mensaje.textContent = "Lograste equilibrar decisiones, recursos y bienestar. Tu comunidad quedó preparada para enfrentar nuevos retos.";
+  if (porcentaje >= 80) {
+    titulo.textContent = "¡Misión completada con estrategia!";
+    mensaje.textContent = "No solo reconociste conceptos: lograste aplicarlos a situaciones donde varias respuestas parecían razonables.";
   } else if (porcentaje >= 60) {
-    titulo.textContent = "¡La comunidad sobrevivió!";
-    mensaje.textContent = "Superaste la misión, aunque todavía hay dimensiones y recursos que puedes mejorar en otra partida.";
+    titulo.textContent = "¡Buen análisis!";
+    mensaje.textContent = "Comprendes buena parte de los conceptos. Revisa las explicaciones de los retos que fallaste y vuelve a intentarlo.";
   } else {
-    titulo.textContent = "La zona necesita otra oportunidad";
-    mensaje.textContent = "Algunas decisiones dejaron a la comunidad vulnerable. Repasa el contenido y vuelve a construir tu estrategia.";
+    titulo.textContent = "La misión necesita otra estrategia";
+    mensaje.textContent = "Los distractores eran parecidos a la respuesta correcta. Repasa principios, dimensiones, ODS y cambio climático antes de volver a jugar.";
   }
 
   mostrarPantalla(pantallaFinal);
@@ -618,25 +687,26 @@ function terminarJuego() {
 
 function siguienteMision() {
   if (!respondido) return;
-  const faseAnterior = misiones[indice].fase;
+  const faseAnterior = misionesPartida[indice].fase;
   indice += 1;
 
-  if (indice >= misiones.length) {
+  if (indice >= misionesPartida.length) {
     terminarJuego();
     return;
   }
 
-  const faseNueva = misiones[indice].fase;
-  if (faseNueva !== faseAnterior) {
-    presentarFase(faseNueva);
-  } else {
+  const faseNueva = misionesPartida[indice].fase;
+  if (faseNueva !== faseAnterior) presentarFase(faseNueva);
+  else {
     renderizarMision();
-    document.querySelector("#reto-actual").scrollIntoView({ behavior: "smooth", block: "center" });
+    document.querySelector("#reto-actual").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
 function reiniciarPartida() {
   detenerTemporizador();
+  misionesPartida = prepararMisionesPartida();
+  ultimaPosicionCorrecta = -1;
   indice = 0;
   correctas = 0;
   puntos = 0;
@@ -644,26 +714,114 @@ function reiniciarPartida() {
   respondido = false;
   detalleRespuestas = [];
   equilibrio = { ambiental: 45, social: 45, economica: 45 };
-  recursos = { creditos: 600, agua: 100, energia: 100, comunidad: 100 };
   document.querySelector("#estado-guardado").textContent = "";
-  actualizarEquilibrio();
-  actualizarRecursos();
   presentarFase(1);
 }
 
-comenzar.addEventListener("click", reiniciarPartida);
-reintentar.addEventListener("click", reiniciarPartida);
+comenzar.addEventListener("click", () => {
+  if (sesion?.tipo === "registrado" || sesion?.tipo === "admin") reiniciarPartida();
+  else abrirRegistroJuego();
+});
+
+reintentar.addEventListener("click", () => {
+  if (sesion?.tipo === "registrado" || sesion?.tipo === "admin") reiniciarPartida();
+  else abrirRegistroJuego();
+});
+
 continuar.addEventListener("click", siguienteMision);
 
+escuelaRegistro.addEventListener("change", () => {
+  const esOtro = escuelaRegistro.value === "Otro";
+  campoActividad.hidden = !esOtro;
+  actividadRegistro.required = esOtro;
+  if (!esOtro) actividadRegistro.value = "";
+});
+
+cerrarRegistro.addEventListener("click", cerrarRegistroJuego);
+cancelarRegistro.addEventListener("click", cerrarRegistroJuego);
+dialogoRegistro.addEventListener("click", (evento) => {
+  if (evento.target === dialogoRegistro) cerrarRegistroJuego();
+});
+
+formularioRegistro.addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  errorRegistro.textContent = "";
+
+  const nombreLimpio = normalizar(nombreRegistro.value);
+  const escuelaLimpia = normalizar(escuelaRegistro.value);
+  const actividadLimpia = normalizar(actividadRegistro.value);
+
+  if (nombreLimpio.length < 2) {
+    errorRegistro.textContent = "Escribe un nombre válido.";
+    nombreRegistro.focus();
+    return;
+  }
+
+  if (!escuelaLimpia) {
+    errorRegistro.textContent = "Selecciona tu escuela o procedencia.";
+    escuelaRegistro.focus();
+    return;
+  }
+
+  if (escuelaLimpia === "Otro" && actividadLimpia.length < 3) {
+    errorRegistro.textContent = "Indica a qué te dedicas o de dónde nos visitas.";
+    actividadRegistro.focus();
+    return;
+  }
+
+  const boton = formularioRegistro.querySelector("button[type='submit']");
+  boton.disabled = true;
+  boton.textContent = "Registrando...";
+
+  registrandoJugador = true;
+
+  try {
+    if (auth.currentUser) await signOut(auth);
+    await setPersistence(auth, browserSessionPersistence);
+    const credencial = await signInAnonymously(auth);
+
+    const visitante = {
+      uid: credencial.user.uid,
+      nombre: nombreLimpio,
+      escuela: escuelaLimpia,
+      actividad: escuelaLimpia === "Otro" ? actividadLimpia : "",
+      tipo: "registrado"
+    };
+
+    await setDoc(doc(db, "visitantes", visitante.uid), {
+      nombre: visitante.nombre,
+      escuela: visitante.escuela,
+      actividad: visitante.actividad,
+      tipo: "registrado",
+      fechaRegistro: serverTimestamp(),
+      ultimoAcceso: serverTimestamp()
+    }, { merge: true });
+
+    sessionStorage.setItem(CLAVE_VISITANTE, JSON.stringify(visitante));
+    localStorage.removeItem(CLAVE_ADMIN);
+    sesion = visitante;
+    actualizarDatosJugador();
+    cerrarRegistroJuego();
+    reiniciarPartida();
+  } catch (error) {
+    console.error(error);
+    errorRegistro.textContent = "No se pudo registrar la participación. Revisa la conexión con Firebase e inténtalo de nuevo.";
+  } finally {
+    registrandoJugador = false;
+    boton.disabled = false;
+    boton.textContent = "Comenzar partida";
+  }
+});
+
 entrarFase.addEventListener("click", () => {
-  const mision = misiones[indice];
+  const mision = misionesPartida[indice];
   if (mision.fase !== fasePendiente) return;
   mostrarPantalla(pantallaJuego);
   renderizarMision();
   pantallaJuego.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-pausarTiempo.addEventListener("click", () => {
+pausarTiempo?.addEventListener("click", () => {
   if (temporizador.hidden || respondido) return;
   tiempoPausado = !tiempoPausado;
   pausarTiempo.textContent = tiempoPausado ? "Reanudar" : "Pausar";
@@ -671,8 +829,11 @@ pausarTiempo.addEventListener("click", () => {
 });
 
 onAuthStateChanged(auth, async (usuario) => {
+  if (registrandoJugador) return;
+
   const visitante = leerJSON(sessionStorage, CLAVE_VISITANTE);
   const adminRecordado = leerJSON(localStorage, CLAVE_ADMIN);
+  sesion = null;
 
   try {
     if (usuario && !usuario.isAnonymous) {
@@ -683,7 +844,8 @@ onAuthStateChanged(auth, async (usuario) => {
           tipo: "admin",
           uid: usuario.uid,
           nombre: datos.nombre || adminRecordado?.nombre || "Administrador",
-          escuela: "Administrador"
+          escuela: "Administrador",
+          actividad: ""
         };
       }
     }
@@ -696,7 +858,8 @@ onAuthStateChanged(auth, async (usuario) => {
           tipo: "registrado",
           uid: usuario.uid,
           nombre: datos.nombre || visitante.nombre,
-          escuela: datos.escuela || visitante.escuela
+          escuela: datos.escuela || visitante.escuela,
+          actividad: datos.actividad || visitante.actividad || ""
         };
       }
     }
@@ -704,15 +867,7 @@ onAuthStateChanged(auth, async (usuario) => {
     console.error(error);
   }
 
-  if (!sesion) {
-    mostrarSolo(bloqueado);
-    return;
-  }
-
-  jugadorNombre.textContent = sesion.nombre;
-  jugadorEscuela.textContent = sesion.escuela;
-  notaAdmin.hidden = sesion.tipo !== "admin";
-  actualizarEquilibrio();
-  actualizarRecursos();
-  mostrarSolo(autorizado);
+  // La página del juego es pública; solo la partida requiere registro.
+  autorizado.hidden = false;
+  actualizarDatosJugador();
 });

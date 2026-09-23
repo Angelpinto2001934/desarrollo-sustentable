@@ -1,91 +1,95 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Panel de administración del proyecto Desarrollo Sustentable.">
-  <title>Administración | Desarrollo Sustentable</title>
-  <link rel="stylesheet" href="CSS/general.css">
-  <link rel="stylesheet" href="CSS/admin.css">
-  <script type="module" src="JS/admin.js"></script>
+    <link href="https://images.unsplash.com" rel="preconnect" />
+    <link href="https://commons.wikimedia.org" rel="preconnect" />
+    <link href="https://thumb.wikimedia.org" rel="preconnect" />
+    <link href="https://upload.wikimedia.org" rel="preconnect" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="Panel de administración del proyecto Desarrollo Sustentable." name="description" />
+    <title>Administración | Desarrollo Sustentable</title>
+    <link href="CSS/general.css" rel="stylesheet" />
+    <link href="CSS/admin.css" rel="stylesheet" />
+    <script src="JS/admin.js" type="module"></script>
 </head>
 
 <body>
-  <header class="encabezado-interno">
-    <p class="etiqueta">Gestión del proyecto</p>
-    <h1>Panel de administración</h1>
-    <p>Visitantes, participación y resultados del juego.</p>
-  </header>
-
-  <main>
-    <section>
-      <p class="sobrelinea">Sesión administrativa</p>
-      <h2>Hola, <span id="nombre-admin">Administrador</span></h2>
-      <div class="admin-cabecera-acciones">
-        <a class="boton" href="index.html">Ver sitio</a>
-        <button class="boton-secundario" type="button" id="cerrar-sesion-admin">Cerrar sesión</button>
-      </div>
-    </section>
-
-    <section id="estado-admin" class="nota">Comprobando permisos y cargando información...</section>
-
-    <div id="contenido-admin" hidden>
-      <section>
-        <p class="sobrelinea">Resumen</p>
-        <h2>Participación</h2>
-        <div class="admin-resumen">
-          <article class="admin-metrica"><span>Visitantes registrados</span><strong id="total-visitantes">0</strong>
-          </article>
-          <article class="admin-metrica"><span>Juegos realizados</span><strong id="total-resultados">0</strong>
-          </article>
-          <article class="admin-metrica"><span>Promedio</span><strong id="promedio-resultados">—</strong></article>
+    <header class="encabezado-interno">
+        <p class="etiqueta">Gestión del proyecto</p>
+        <h1>Panel de administración</h1>
+        <p>Visitantes, participación y resultados del juego.</p>
+    </header>
+    <main>
+        <section>
+            <p class="sobrelinea">Sesión administrativa</p>
+            <h2>Hola, <span id="nombre-admin">Administrador</span></h2>
+            <div class="admin-cabecera-acciones">
+                <a class="boton" href="index.html">Ver sitio</a>
+                <button class="boton-secundario" id="cerrar-sesion-admin" type="button">Cerrar sesión</button>
+            </div>
+        </section>
+        <section class="nota" id="estado-admin">Comprobando permisos y cargando información...</section>
+        <div hidden="" id="contenido-admin">
+            <section>
+                <p class="sobrelinea">Resumen</p>
+                <h2>Participación</h2>
+                <div class="admin-resumen">
+                    <article class="admin-metrica"><span>Visitantes registrados</span><strong
+                            id="total-visitantes">0</strong></article>
+                    <article class="admin-metrica"><span>Juegos realizados</span><strong
+                            id="total-resultados">0</strong></article>
+                    <article class="admin-metrica"><span>Promedio</span><strong id="promedio-resultados">—</strong>
+                    </article>
+                </div>
+            </section>
+            <section>
+                <p class="sobrelinea">Base de datos</p>
+                <h2>Visitantes registrados</h2>
+                <div class="tabla-contenedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Escuela</th>
+                                <th>Actividad / procedencia</th>
+                                <th>Fecha</th>
+                                <th>ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-visitantes"></tbody>
+                    </table>
+                </div>
+            </section>
+            <section>
+                <p class="sobrelinea">Resultados</p>
+                <h2>Partidas realizadas</h2>
+                <div class="tabla-contenedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Escuela</th>
+                                <th>Resultado</th>
+                                <th>Puntos</th>
+                                <th>Rango</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-resultados"></tbody>
+                    </table>
+                </div>
+            </section>
         </div>
-      </section>
-
-      <section>
-        <p class="sobrelinea">Base de datos</p>
-        <h2>Visitantes registrados</h2>
-        <div class="tabla-contenedor">
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Escuela</th>
-                <th>Fecha</th>
-                <th>ID</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-visitantes"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section>
-        <p class="sobrelinea">Resultados</p>
-        <h2>Partidas realizadas</h2>
-        <div class="tabla-contenedor">
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Escuela</th>
-                <th>Resultado</th>
-                <th>Puntos</th>
-                <th>Rango</th>
-                <th>Fecha</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-resultados"></tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <p>Proyecto educativo de Desarrollo Sustentable · 2026</p>
-  </footer>
+    </main>
+    <footer>
+        <p class="footer-principal">Proyecto educativo de la asignatura de Desarrollo Sustentable.</p>
+        <p class="footer-secundario">Contenido elaborado con fines académicos y de divulgación.</p>
+        <p class="footer-secundario">TecNM · Instituto Tecnológico Superior de Felipe Carrillo Puerto · Ingeniería en
+            Sistemas Computacionales.</p>
+    </footer>
 </body>
 
 </html>

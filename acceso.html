@@ -1,78 +1,85 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Registro de visita al sitio de Desarrollo Sustentable.">
-  <title>Bienvenida | Desarrollo Sustentable</title>
-  <link rel="stylesheet" href="CSS/general.css">
-  <link rel="stylesheet" href="CSS/acceso.css">
-  <script type="module" src="JS/acceso.js"></script>
+    <link href="https://images.unsplash.com" rel="preconnect" />
+    <link href="https://commons.wikimedia.org" rel="preconnect" />
+    <link href="https://thumb.wikimedia.org" rel="preconnect" />
+    <link href="https://upload.wikimedia.org" rel="preconnect" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="Registro de visita al sitio de Desarrollo Sustentable." name="description" />
+    <title>Bienvenida | Desarrollo Sustentable</title>
+    <link href="CSS/general.css" rel="stylesheet" />
+    <link href="CSS/acceso.css" rel="stylesheet" />
+    <script src="JS/acceso.js" type="module"></script>
 </head>
 
 <body class="pagina-acceso">
-  <main class="acceso-contenedor">
-    <section class="acceso-panel" aria-labelledby="titulo-acceso">
-      <div class="marca-acceso" aria-hidden="true">🌱</div>
-      <p class="sobrelinea">Bienvenida</p>
-      <h1 id="titulo-acceso">Desarrollo Sustentable</h1>
-      <p>Registra tu visita para participar en el juego o continúa de forma anónima para consultar el contenido.</p>
-
-      <form class="formulario-acceso" id="formulario-visita" novalidate>
-        <div class="campo">
-          <label for="nombre">Nombre</label>
-          <input id="nombre" name="nombre" type="text" autocomplete="name" minlength="2" maxlength="80" required
-            placeholder="Escribe tu nombre">
+    <main class="acceso-contenedor">
+        <section aria-labelledby="titulo-acceso" class="acceso-panel">
+            <div aria-hidden="true" class="marca-acceso"><img alt="Desarrollo Sustentable" class="logo-acceso"
+                    src="IMG/logo-desarrollo.png" /></div>
+            <p class="sobrelinea">Bienvenida</p>
+            <h1 id="titulo-acceso">Desarrollo Sustentable</h1>
+            <p>Registra tu participación para acceder al juego y conservar tu resultado. Si solo deseas consultar el
+                contenido, puedes continuar como visitante anónimo.</p>
+            <form class="formulario-acceso" id="formulario-visita" novalidate="">
+                <div class="campo">
+                    <label for="nombre">Nombre</label>
+                    <input autocomplete="name" id="nombre" maxlength="80" minlength="2" name="nombre"
+                        placeholder="Escribe tu nombre" required="" type="text" />
+                </div>
+                <div class="campo">
+                    <label for="escuela">Escuela</label>
+                    <select id="escuela" name="escuela" required="">
+                        <option value="">Selecciona tu escuela</option>
+                        <option value="CBTIS 72">CBTis 72 "Andrés Quintana Roo"</option>
+                        <option value="BACHILLER CEB510">CEB 5/10 Profr. Rafael Ramírez Castañeda</option>
+                        <option value="CONALEP">Plantel Conalep Felipe Carrillo Puerto</option>
+                        <option value="Otro">Otra institución / No pertenezco a estas escuelas</option>
+                    </select>
+                </div>
+                <div class="campo" id="campo-actividad" hidden><label for="actividad">¿A qué te dedicas o de dónde nos
+                        visitas?</label><input id="actividad" maxlength="100"
+                        placeholder="Ej. estudiante de otra escuela, docente, trabajador..." type="text" /></div>
+                <p aria-live="polite" class="mensaje-error" id="error-visita"></p>
+                <div class="acceso-acciones">
+                    <button class="boton" type="submit">Ingresar</button>
+                    <button class="boton-anonimo" id="continuar-anonimo" type="button">Continuar como anónimo</button>
+                </div>
+            </form>
+            <div class="separador-acceso">Acceso especial</div>
+            <button class="enlace-admin" id="abrir-admin" type="button">Soy administrador</button>
+            <p class="aviso-privacidad">El nombre y la escuela se usarán para registrar la participación y,
+                posteriormente, relacionarla con el resultado del juego.</p>
+        </section>
+    </main>
+    <dialog class="dialogo-admin" id="dialogo-admin">
+        <div class="dialogo-admin-contenido">
+            <div class="dialogo-admin-cabecera">
+                <div>
+                    <p class="sobrelinea">Acceso restringido</p>
+                    <h2>Administrador</h2>
+                </div>
+                <button aria-label="Cerrar" class="cerrar-admin" id="cerrar-admin" type="button">×</button>
+            </div>
+            <p>Acceso reservado a la administración del proyecto.</p>
+            <form class="formulario-admin" id="formulario-admin">
+                <div class="campo">
+                    <label for="correo-admin">Correo</label>
+                    <input autocomplete="username" id="correo-admin" required="" type="email" />
+                </div>
+                <div class="campo">
+                    <label for="password-admin">Contraseña</label>
+                    <input autocomplete="current-password" id="password-admin" required="" type="password" />
+                </div>
+                <p aria-live="polite" class="mensaje-error" id="error-admin"></p>
+                <button class="boton" type="submit">Entrar como administrador</button>
+            </form>
         </div>
-        <div class="campo">
-          <label for="escuela">Escuela</label>
-          <select id="escuela" name="escuela" required>
-            <option value="">Selecciona tu escuela</option>
-            <option value="Escuela Secundaria Técnica José María Luis Mora">Escuela Secundaria Técnica José María Luis
-              Mora</option>
-            <option value="Escuela Secundaria General Número 3 Leona Vicario">Escuela Secundaria General Número 3 Leona
-              Vicario</option>
-          </select>
-        </div>
-        <p class="mensaje-error" id="error-visita" aria-live="polite"></p>
-        <div class="acceso-acciones">
-          <button class="boton" type="submit">Ingresar</button>
-          <button class="boton-anonimo" type="button" id="continuar-anonimo">Continuar como anónimo</button>
-        </div>
-      </form>
-
-      <div class="separador-acceso">Acceso especial</div>
-      <button class="enlace-admin" type="button" id="abrir-admin">Soy administrador</button>
-      <p class="aviso-privacidad">El nombre y la escuela se usarán para registrar la participación y, posteriormente,
-        relacionarla con el resultado del juego.</p>
-    </section>
-  </main>
-
-  <dialog class="dialogo-admin" id="dialogo-admin">
-    <div class="dialogo-admin-contenido">
-      <div class="dialogo-admin-cabecera">
-        <div>
-          <p class="sobrelinea">Acceso restringido</p>
-          <h2>Administrador</h2>
-        </div>
-        <button class="cerrar-admin" type="button" id="cerrar-admin" aria-label="Cerrar">×</button>
-      </div>
-      <p>Este acceso es únicamente para los cuatro integrantes administradores del proyecto.</p>
-      <form class="formulario-admin" id="formulario-admin">
-        <div class="campo">
-          <label for="correo-admin">Correo</label>
-          <input id="correo-admin" type="email" autocomplete="username" required>
-        </div>
-        <div class="campo">
-          <label for="password-admin">Contraseña</label>
-          <input id="password-admin" type="password" autocomplete="current-password" required>
-        </div>
-        <p class="mensaje-error" id="error-admin" aria-live="polite"></p>
-        <button class="boton" type="submit">Entrar como administrador</button>
-      </form>
-    </div>
-  </dialog>
+    </dialog>
 </body>
 
 </html>
