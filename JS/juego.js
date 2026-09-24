@@ -389,6 +389,13 @@ function actualizarDatosJugador() {
 
 function abrirRegistroJuego() {
   errorRegistro.textContent = "";
+
+  // El campo de actividad solo debe aparecer si se eligió "Otra institución".
+  const esOtraInstitucion = escuelaRegistro.value === "Otro";
+  campoActividad.hidden = !esOtraInstitucion;
+  actividadRegistro.required = esOtraInstitucion;
+  if (!esOtraInstitucion) actividadRegistro.value = "";
+
   if (typeof dialogoRegistro.showModal === "function") dialogoRegistro.showModal();
   else dialogoRegistro.setAttribute("open", "");
   nombreRegistro.focus();
@@ -758,13 +765,13 @@ formularioRegistro.addEventListener("submit", async (evento) => {
   }
 
   if (!escuelaLimpia) {
-    errorRegistro.textContent = "Selecciona tu escuela o procedencia.";
+    errorRegistro.textContent = "Selecciona tu institución.";
     escuelaRegistro.focus();
     return;
   }
 
   if (escuelaLimpia === "Otro" && actividadLimpia.length < 3) {
-    errorRegistro.textContent = "Indica a qué te dedicas o de dónde nos visitas.";
+    errorRegistro.textContent = "Indica a qué te dedicas.";
     actividadRegistro.focus();
     return;
   }
@@ -867,7 +874,12 @@ onAuthStateChanged(auth, async (usuario) => {
     console.error(error);
   }
 
-  // La página del juego es pública; solo la partida requiere registro.
+  // El sitio es público. Solo el juego solicita registro.
   autorizado.hidden = false;
   actualizarDatosJugador();
+
+  if (!sesion) {
+    // Al entrar a Juego se solicita el registro de inmediato.
+    setTimeout(() => abrirRegistroJuego(), 120);
+  }
 });

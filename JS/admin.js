@@ -1,5 +1,11 @@
 import { auth, db, FIREBASE_CONFIGURADO } from "./firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import {
+  browserLocalPersistence,
+  onAuthStateChanged,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 import {
   collection,
   doc,
@@ -8,6 +14,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 const CLAVE_ADMIN = "ds_admin_recordado";
+
+const accesoPanel = document.querySelector("#acceso-admin-panel");
+const panelAdmin = document.querySelector("#panel-admin");
+const formularioAdmin = document.querySelector("#formulario-admin-directo");
+const correoAdmin = document.querySelector("#correo-admin-directo");
+const passwordAdmin = document.querySelector("#password-admin-directo");
+const errorAdmin = document.querySelector("#error-admin-directo");
+
 const estado = document.querySelector("#estado-admin");
 const contenido = document.querySelector("#contenido-admin");
 const totalVisitantes = document.querySelector("#total-visitantes");
@@ -25,17 +39,24 @@ function fechaLegible(valor) {
   return new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(fecha);
 }
 
-function irAccesoAdmin() {
-  localStorage.removeItem(CLAVE_ADMIN);
-  location.replace("acceso.html?admin=1");
+function mostrarAcceso(mensaje = "") {
+  accesoPanel.hidden = false;
+  panelAdmin.hidden = true;
+  errorAdmin.textContent = mensaje;
+}
+
+function mostrarPanel() {
+  accesoPanel.hidden = true;
+  panelAdmin.hidden = false;
 }
 
 async function cargarPanel(usuario) {
   const adminDoc = await getDoc(doc(db, "admins", usuario.uid));
   if (!adminDoc.exists()) {
     await signOut(auth);
-    irAccesoAdmin();
-    return;
+    localStorage.removeItem(CLAVE_ADMIN);
+    mostrarAcceso("Esta cuenta no tiene permisos de administrador.");
+    return false;
   }
 
   const admin = adminDoc.data();
@@ -45,6 +66,11 @@ async function cargarPanel(usuario) {
     nombre: admin.nombre || "Administrador",
     correo: usuario.email || ""
   }));
+
+  mostrarPanel();
+  estado.hidden = false;
+  estado.textContent = "Cargando información...";
+  contenido.hidden = true;
 
   const [visitantesSnap, resultadosSnap] = await Promise.all([
     getDocs(collection(db, "visitantes")),
@@ -68,11 +94,7 @@ async function cargarPanel(usuario) {
   cuerpo.innerHTML = "";
   const visitantes = [];
   visitantesSnap.forEach((documento) => visitantes.push({ uid: documento.id, ...documento.data() }));
-  visitantes.sort((a, b) => {
-    const ta = a.fechaRegistro?.toMillis?.() || 0;
-    const tb = b.fechaRegistro?.toMillis?.() || 0;
-    return tb - ta;
-  });
+  visitantes.sort((a, b) => (b.fechaRegistro?.toMillis?.() || 0) - (a.fechaRegistro?.toMillis?.() || 0));
 
   if (!visitantes.length) {
     const fila = document.createElement("tr");
@@ -81,12 +103,17 @@ async function cargarPanel(usuario) {
   } else {
     visitantes.forEach((visitante) => {
       const fila = document.createElement("tr");
-      [visitante.nombre || "—", visitante.escuela || "—", visitante.actividad || "—", fechaLegible(visitante.fechaRegistro), visitante.uid.slice(0, 8) + "…"]
-        .forEach((valor) => {
-          const celda = document.createElement("td");
-          celda.textContent = valor;
-          fila.appendChild(celda);
-        });
+      [
+        visitante.nombre || "—",
+        visitante.escuela === "Otro" ? "Otra institución" : (visitante.escuela || "—"),
+        visitante.actividad || "—",
+        fechaLegible(visitante.fechaRegistro),
+        visitante.uid.slice(0, 8) + "…"
+      ].forEach((valor) => {
+        const celda = document.createElement("td");
+        celda.textContent = valor;
+        fila.appendChild(celda);
+      });
       cuerpo.appendChild(fila);
     });
   }
@@ -94,11 +121,7 @@ async function cargarPanel(usuario) {
   cuerpoResultados.innerHTML = "";
   const resultados = [];
   resultadosSnap.forEach((documento) => resultados.push({ id: documento.id, ...documento.data() }));
-  resultados.sort((a, b) => {
-    const ta = a.fecha?.toMillis?.() || 0;
-    const tb = b.fecha?.toMillis?.() || 0;
-    return tb - ta;
-  });
+  resultados.sort((a, b) => (b.fecha?.toMillis?.() || 0) - (a.fecha?.toMillis?.() || 0));
 
   if (!resultados.length) {
     const fila = document.createElement("tr");
@@ -112,7 +135,7 @@ async function cargarPanel(usuario) {
         : "—";
       [
         resultado.nombre || "—",
-        resultado.escuela === "Otro" ? (resultado.actividad || "Otro") : (resultado.escuela || "—"),
+        resultado.escuela === "Otro" ? (resultado.actividad || "Otra institución") : (resultado.escuela || "—"),
         resultadoTexto,
         resultado.puntos ?? "—",
         resultado.insignia || "—",
@@ -128,20 +151,50 @@ async function cargarPanel(usuario) {
 
   estado.hidden = true;
   contenido.hidden = false;
+  return true;
 }
+
+formularioAdmin.addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+  errorAdmin.textContent = "";
+
+  if (!FIREBASE_CONFIGURADO) {
+    errorAdmin.textContent = "Firebase todavía no está configurado.";
+    return;
+  }
+
+  const boton = formularioAdmin.querySelector("button[type='submit']");
+  boton.disabled = true;
+  boton.textContent = "Verificando...";
+
+  try {
+    if (auth.currentUser) await signOut(auth);
+    await setPersistence(auth, browserLocalPersistence);
+    await signInWithEmailAndPassword(auth, correoAdmin.value.trim(), passwordAdmin.value);
+    // onAuthStateChanged comprobará el UID y cargará el panel.
+    formularioAdmin.reset();
+  } catch (error) {
+    console.error(error);
+    errorAdmin.textContent = "Correo o contraseña incorrectos, o la cuenta no tiene acceso administrativo.";
+  } finally {
+    boton.disabled = false;
+    boton.textContent = "Entrar al panel";
+  }
+});
 
 cerrarSesion.addEventListener("click", async () => {
   try { await signOut(auth); } catch { /* sin acción adicional */ }
   localStorage.removeItem(CLAVE_ADMIN);
-  location.replace("acceso.html");
+  mostrarAcceso();
+  formularioAdmin.reset();
 });
 
 if (!FIREBASE_CONFIGURADO) {
-  estado.textContent = "Firebase todavía no está configurado. Completa JS/firebase.js.";
+  mostrarAcceso("Firebase todavía no está configurado.");
 } else {
   onAuthStateChanged(auth, async (usuario) => {
     if (!usuario || usuario.isAnonymous) {
-      irAccesoAdmin();
+      mostrarAcceso();
       return;
     }
 
@@ -149,7 +202,9 @@ if (!FIREBASE_CONFIGURADO) {
       await cargarPanel(usuario);
     } catch (error) {
       console.error(error);
-      estado.textContent = "No se pudo cargar el panel. Revisa Firestore y sus reglas de seguridad.";
+      await signOut(auth).catch(() => {});
+      localStorage.removeItem(CLAVE_ADMIN);
+      mostrarAcceso("No se pudo comprobar el acceso. Revisa la conexión e inténtalo de nuevo.");
     }
   });
 }

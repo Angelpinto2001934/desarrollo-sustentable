@@ -45,49 +45,7 @@
 
     const visitante = leerJSON(sessionStorage, CLAVES.visitante);
     if (visitante?.tipo === "registrado" && visitante?.uid) return visitante;
-    if (visitante?.tipo === "anonimo") return visitante;
     return null;
-  }
-
-  function irAAcceso(next = "index.html") {
-    location.href = `acceso.html?next=${encodeURIComponent(next)}`;
-  }
-
-  function crearDialogoJuego() {
-    if (document.querySelector("#dialogo-juego")) return;
-
-    const dialogo = document.createElement("dialog");
-    dialogo.id = "dialogo-juego";
-    dialogo.className = "dialogo-sitio";
-    dialogo.innerHTML = `
-      <div class="dialogo-contenido">
-        <button class="cerrar-dialogo" type="button" aria-label="Cerrar">×</button>
-        <h2>¿Quieres poner a prueba lo que aprendiste?</h2>
-        <p>Para realizar el juego necesitas registrar tu nombre y escuela. El contenido del sitio puede seguir consultándose de forma anónima.</p>
-        <div class="dialogo-acciones">
-          <button class="boton" type="button" id="registrarse-juego">Registrarme para jugar</button>
-          <button class="boton-secundario" type="button" id="seguir-sitio">Seguir viendo el sitio</button>
-        </div>
-      </div>`;
-
-    document.body.appendChild(dialogo);
-    dialogo.querySelector(".cerrar-dialogo").addEventListener("click", () => dialogo.close());
-    dialogo.querySelector("#seguir-sitio").addEventListener("click", () => dialogo.close());
-    dialogo.querySelector("#registrarse-juego").addEventListener("click", () => irAAcceso("juego.html"));
-    dialogo.addEventListener("click", (evento) => {
-      if (evento.target === dialogo) dialogo.close();
-    });
-  }
-
-  function protegerJuego(estado) {
-    document.querySelectorAll("a[href='juego.html'], .enlace-juego").forEach((enlace) => {
-      enlace.addEventListener("click", (evento) => {
-        if (estado?.tipo === "registrado" || estado?.tipo === "admin") return;
-        evento.preventDefault();
-        crearDialogoJuego();
-        document.querySelector("#dialogo-juego").showModal();
-      });
-    });
   }
 
   function temaOscuroActivo() {
@@ -210,7 +168,7 @@
     // al comenzar una partida dentro de juego.html.
     crearNavegacionResponsive();
     crearControlTema();
-    window.DSSitio = { aplicarTema, obtenerEstado, irAAcceso };
+    window.DSSitio = { aplicarTema, obtenerEstado };
   }
 
   if (document.readyState === "loading") {

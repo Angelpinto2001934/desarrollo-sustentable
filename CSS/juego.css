@@ -929,6 +929,11 @@ html[data-theme="dark"] .chip-fase {
   gap: .45rem;
 }
 
+/* Respeta el atributo hidden del campo condicional. */
+.campo-registro-juego[hidden] {
+  display: none !important;
+}
+
 .campo-registro-juego label {
   font-weight: 800;
   color: var(--verde-900);
