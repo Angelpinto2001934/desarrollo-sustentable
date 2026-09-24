@@ -1205,3 +1205,58 @@ footer .footer-secundario {
     margin-top: .75rem;
   }
 }
+
+/* =========================================================
+   Navegación móvil compacta
+   ========================================================= */
+@media (max-width: 760px) {
+  .menu-movil,
+  .control-tema {
+    width: 42px;
+    height: 42px;
+    top: .65rem;
+  }
+
+  .menu-movil {
+    left: .65rem;
+    border-radius: 12px;
+    font-size: 1.35rem;
+  }
+
+  .control-tema {
+    right: .65rem;
+  }
+
+  nav {
+    width: min(76vw, 280px);
+    padding: .75rem;
+  }
+
+  nav .marca-nav {
+    margin: .55rem 2.35rem .7rem .1rem;
+    padding: .2rem;
+  }
+
+  nav .marca-nav img {
+    width: 108px;
+    height: 68px;
+  }
+
+  .cerrar-menu-movil {
+    top: .55rem;
+    right: .55rem;
+    width: 36px;
+    height: 36px;
+    font-size: 1.25rem;
+  }
+
+  nav ul {
+    gap: .22rem;
+  }
+
+  nav a {
+    padding: .62rem .78rem;
+    border-radius: 10px;
+    font-size: .94rem;
+  }
+}

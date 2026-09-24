@@ -23,65 +23,66 @@
         <p>Visitantes, participación y resultados del juego.</p>
     </header>
     <main>
-        <section>
-            <p class="sobrelinea">Sesión administrativa</p>
-            <h2>Hola, <span id="nombre-admin">Administrador</span></h2>
-            <div class="admin-cabecera-acciones">
-                <a class="boton" href="index.html">Ver sitio</a>
-                <button class="boton-secundario" id="cerrar-sesion-admin" type="button">Cerrar sesión</button>
-            </div>
+        <section class="admin-login" id="acceso-admin-panel">
+            <p class="sobrelinea">Acceso administrativo</p>
+            <h2>Iniciar sesión</h2>
+            <p class="introduccion">Este acceso es exclusivo para la administración del proyecto.</p>
+            <form class="formulario-admin-directo" id="formulario-admin-directo">
+                <div class="campo-admin">
+                    <label for="correo-admin-directo">Correo</label>
+                    <input autocomplete="username" id="correo-admin-directo" required type="email" placeholder="Correo de administrador">
+                </div>
+                <div class="campo-admin">
+                    <label for="password-admin-directo">Contraseña</label>
+                    <input autocomplete="current-password" id="password-admin-directo" required type="password" placeholder="Contraseña">
+                </div>
+                <p aria-live="polite" class="mensaje-admin" id="error-admin-directo"></p>
+                <button class="boton" type="submit">Entrar al panel</button>
+                <a class="boton-secundario" href="index.html">Volver al sitio</a>
+            </form>
         </section>
-        <section class="nota" id="estado-admin">Comprobando permisos y cargando información...</section>
-        <div hidden="" id="contenido-admin">
+
+        <div id="panel-admin" hidden>
             <section>
-                <p class="sobrelinea">Resumen</p>
-                <h2>Participación</h2>
-                <div class="admin-resumen">
-                    <article class="admin-metrica"><span>Visitantes registrados</span><strong
-                            id="total-visitantes">0</strong></article>
-                    <article class="admin-metrica"><span>Juegos realizados</span><strong
-                            id="total-resultados">0</strong></article>
-                    <article class="admin-metrica"><span>Promedio</span><strong id="promedio-resultados">—</strong>
-                    </article>
+                <p class="sobrelinea">Sesión administrativa</p>
+                <h2>Hola, <span id="nombre-admin">Administrador</span></h2>
+                <div class="admin-cabecera-acciones">
+                    <a class="boton" href="index.html">Ver sitio</a>
+                    <button class="boton-secundario" id="cerrar-sesion-admin" type="button">Cerrar sesión</button>
                 </div>
             </section>
-            <section>
-                <p class="sobrelinea">Base de datos</p>
-                <h2>Visitantes registrados</h2>
-                <div class="tabla-contenedor">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Escuela</th>
-                                <th>Actividad / procedencia</th>
-                                <th>Fecha</th>
-                                <th>ID</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla-visitantes"></tbody>
-                    </table>
-                </div>
-            </section>
-            <section>
-                <p class="sobrelinea">Resultados</p>
-                <h2>Partidas realizadas</h2>
-                <div class="tabla-contenedor">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Escuela</th>
-                                <th>Resultado</th>
-                                <th>Puntos</th>
-                                <th>Rango</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla-resultados"></tbody>
-                    </table>
-                </div>
-            </section>
+            <section class="nota" id="estado-admin">Comprobando permisos y cargando información...</section>
+            <div hidden id="contenido-admin">
+                <section>
+                    <p class="sobrelinea">Resumen</p>
+                    <h2>Participación</h2>
+                    <div class="admin-resumen">
+                        <article class="admin-metrica"><span>Visitantes registrados</span><strong id="total-visitantes">0</strong></article>
+                        <article class="admin-metrica"><span>Juegos realizados</span><strong id="total-resultados">0</strong></article>
+                        <article class="admin-metrica"><span>Promedio</span><strong id="promedio-resultados">—</strong></article>
+                    </div>
+                </section>
+                <section>
+                    <p class="sobrelinea">Base de datos</p>
+                    <h2>Visitantes registrados</h2>
+                    <div class="tabla-contenedor">
+                        <table>
+                            <thead><tr><th>Nombre</th><th>Institución</th><th>Actividad</th><th>Fecha</th><th>ID</th></tr></thead>
+                            <tbody id="tabla-visitantes"></tbody>
+                        </table>
+                    </div>
+                </section>
+                <section>
+                    <p class="sobrelinea">Resultados</p>
+                    <h2>Partidas realizadas</h2>
+                    <div class="tabla-contenedor">
+                        <table>
+                            <thead><tr><th>Nombre</th><th>Institución</th><th>Resultado</th><th>Puntos</th><th>Rango</th><th>Fecha</th></tr></thead>
+                            <tbody id="tabla-resultados"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
         </div>
     </main>
     <footer>

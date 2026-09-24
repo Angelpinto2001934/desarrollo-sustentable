@@ -174,3 +174,8 @@ body.pagina-acceso {
   max-width: 500px;
   margin-inline: auto;
 }
+
+.acceso-acciones .boton,
+.acceso-acciones .boton-secundario {
+  width: 100%;
+}

@@ -152,10 +152,9 @@
         <div class="registro-juego-contenido">
             <button aria-label="Cerrar registro" class="cerrar-registro-juego" id="cerrar-registro-juego"
                 type="button">×</button>
-            <p class="sobrelinea">Registro para jugar</p>
-            <h2>Antes de crear tu mundo</h2>
-            <p>El contenido del sitio es público. Estos datos se solicitan únicamente para registrar tu participación y
-                guardar el resultado de la partida.</p>
+            <p class="sobrelinea">Acceso al juego</p>
+            <h2>Regístrate para jugar</h2>
+            <p>El resto del sitio es público. Para jugar necesitamos tu nombre e institución para guardar tu participación y tu resultado.</p>
             <form class="formulario-registro-juego" id="formulario-registro-juego" novalidate>
                 <div class="campo-registro-juego">
                     <label for="nombre-juego">Nombre</label>
@@ -163,9 +162,9 @@
                         placeholder="Escribe tu nombre" required type="text">
                 </div>
                 <div class="campo-registro-juego">
-                    <label for="escuela-juego">Escuela o procedencia</label>
+                    <label for="escuela-juego">Institución</label>
                     <select id="escuela-juego" required>
-                        <option value="">Selecciona una opción</option>
+                        <option value="">Selecciona tu institución</option>
                         <option value="CBTIS 72">CBTIS 72</option>
                         <option value="BACHILLER CEB510">BACHILLER CEB510</option>
                         <option value="CONALEP">CONALEP</option>
@@ -173,9 +172,9 @@
                     </select>
                 </div>
                 <div class="campo-registro-juego" id="campo-actividad-juego" hidden>
-                    <label for="actividad-juego">¿A qué te dedicas o de dónde nos visitas?</label>
+                    <label for="actividad-juego">¿A qué te dedicas?</label>
                     <input id="actividad-juego" maxlength="100"
-                        placeholder="Ej. estudiante de otra escuela, docente, trabajador..." type="text">
+                        placeholder="Ej. estudiante, docente, trabajador..." type="text">
                 </div>
                 <p aria-live="polite" class="mensaje-registro-juego" id="error-registro-juego"></p>
                 <div class="acciones-registro-juego">

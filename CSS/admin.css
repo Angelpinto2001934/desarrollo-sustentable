@@ -62,3 +62,41 @@ th {
     grid-template-columns: 1fr;
   }
 }
+
+.admin-login {
+  max-width: 520px;
+  margin: 2rem auto;
+}
+
+.formulario-admin-directo {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.campo-admin {
+  display: grid;
+  gap: .4rem;
+}
+
+.campo-admin label {
+  font-weight: 800;
+}
+
+.campo-admin input {
+  width: 100%;
+  min-height: 48px;
+  padding: .72rem .85rem;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--superficie-suave);
+  color: var(--texto);
+  font: inherit;
+}
+
+.mensaje-admin {
+  min-height: 1.35em;
+  margin: 0;
+  color: #b83a3a;
+  font-weight: 700;
+}

@@ -10,7 +10,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Registro de visita al sitio de Desarrollo Sustentable." name="description" />
-    <title>Bienvenida | Desarrollo Sustentable</title>
+    <title>Registro para jugar | Desarrollo Sustentable</title>
     <link href="CSS/general.css" rel="stylesheet" />
     <link href="CSS/acceso.css" rel="stylesheet" />
     <script src="JS/acceso.js" type="module"></script>
@@ -21,10 +21,9 @@
         <section aria-labelledby="titulo-acceso" class="acceso-panel">
             <div aria-hidden="true" class="marca-acceso"><img alt="Desarrollo Sustentable" class="logo-acceso"
                     src="IMG/logo-desarrollo.png" /></div>
-            <p class="sobrelinea">Bienvenida</p>
-            <h1 id="titulo-acceso">Desarrollo Sustentable</h1>
-            <p>Registra tu participación para acceder al juego y conservar tu resultado. Si solo deseas consultar el
-                contenido, puedes continuar como visitante anónimo.</p>
+            <p class="sobrelinea">Registro para jugar</p>
+            <h1 id="titulo-acceso">Antes de comenzar</h1>
+            <p>El sitio es público. Solo necesitamos estos datos si quieres participar en el juego y guardar tu resultado.</p>
             <form class="formulario-acceso" id="formulario-visita" novalidate="">
                 <div class="campo">
                     <label for="nombre">Nombre</label>
@@ -32,54 +31,26 @@
                         placeholder="Escribe tu nombre" required="" type="text" />
                 </div>
                 <div class="campo">
-                    <label for="escuela">Escuela</label>
+                    <label for="escuela">Institución</label>
                     <select id="escuela" name="escuela" required="">
-                        <option value="">Selecciona tu escuela</option>
+                        <option value="">Selecciona tu institución</option>
                         <option value="CBTIS 72">CBTis 72 "Andrés Quintana Roo"</option>
                         <option value="BACHILLER CEB510">CEB 5/10 Profr. Rafael Ramírez Castañeda</option>
                         <option value="CONALEP">Plantel Conalep Felipe Carrillo Puerto</option>
                         <option value="Otro">Otra institución / No pertenezco a estas escuelas</option>
                     </select>
                 </div>
-                <div class="campo" id="campo-actividad" hidden><label for="actividad">¿A qué te dedicas o de dónde nos
-                        visitas?</label><input id="actividad" maxlength="100"
-                        placeholder="Ej. estudiante de otra escuela, docente, trabajador..." type="text" /></div>
+                <div class="campo" id="campo-actividad" hidden><label for="actividad">¿A qué te dedicas?</label><input id="actividad" maxlength="100"
+                        placeholder="Ej. estudiante, docente, trabajador..." type="text" /></div>
                 <p aria-live="polite" class="mensaje-error" id="error-visita"></p>
                 <div class="acceso-acciones">
-                    <button class="boton" type="submit">Ingresar</button>
-                    <button class="boton-anonimo" id="continuar-anonimo" type="button">Continuar como anónimo</button>
+                    <button class="boton" type="submit">Registrarme y jugar</button>
+                    <a class="boton-secundario" href="index.html">Volver al sitio</a>
                 </div>
             </form>
-            <div class="separador-acceso">Acceso especial</div>
-            <button class="enlace-admin" id="abrir-admin" type="button">Soy administrador</button>
-            <p class="aviso-privacidad">El nombre y la escuela se usarán para registrar la participación y,
-                posteriormente, relacionarla con el resultado del juego.</p>
+            <p class="aviso-privacidad">El nombre, la institución y, cuando corresponda, tu actividad se usarán únicamente para registrar tu participación y relacionarla con el resultado del juego.</p>
         </section>
     </main>
-    <dialog class="dialogo-admin" id="dialogo-admin">
-        <div class="dialogo-admin-contenido">
-            <div class="dialogo-admin-cabecera">
-                <div>
-                    <p class="sobrelinea">Acceso restringido</p>
-                    <h2>Administrador</h2>
-                </div>
-                <button aria-label="Cerrar" class="cerrar-admin" id="cerrar-admin" type="button">×</button>
-            </div>
-            <p>Acceso reservado a la administración del proyecto.</p>
-            <form class="formulario-admin" id="formulario-admin">
-                <div class="campo">
-                    <label for="correo-admin">Correo</label>
-                    <input autocomplete="username" id="correo-admin" required="" type="email" />
-                </div>
-                <div class="campo">
-                    <label for="password-admin">Contraseña</label>
-                    <input autocomplete="current-password" id="password-admin" required="" type="password" />
-                </div>
-                <p aria-live="polite" class="mensaje-error" id="error-admin"></p>
-                <button class="boton" type="submit">Entrar como administrador</button>
-            </form>
-        </div>
-    </dialog>
 </body>
 
 </html>
