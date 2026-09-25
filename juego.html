@@ -154,20 +154,20 @@
                 type="button">×</button>
             <p class="sobrelinea">Acceso al juego</p>
             <h2>Regístrate para jugar</h2>
-            <p>El resto del sitio es público. Para jugar necesitamos tu nombre e institución para guardar tu participación y tu resultado.</p>
+            <p>El resto del sitio es público. Para jugar necesitamos tu nombre, un apellido y tu institución para guardar tu participación y tu resultado.</p>
             <form class="formulario-registro-juego" id="formulario-registro-juego" novalidate>
                 <div class="campo-registro-juego">
-                    <label for="nombre-juego">Nombre</label>
-                    <input autocomplete="name" id="nombre-juego" maxlength="80" minlength="2"
-                        placeholder="Escribe tu nombre" required type="text">
+                    <label for="nombre-juego">Nombre y un apellido</label>
+                    <input autocomplete="off" id="nombre-juego" maxlength="60" minlength="3"
+                        placeholder="Ej. Ana López" required type="text">
                 </div>
                 <div class="campo-registro-juego">
                     <label for="escuela-juego">Institución</label>
                     <select id="escuela-juego" required>
                         <option value="">Selecciona tu institución</option>
-                        <option value="CBTIS 72"></option>
-                        <option value="BACHILLER CEB510">BACHILLER CEB510</option>
-                        <option value="CONALEP">CONALEP</option>
+                        <option value='CBTis 72 "Andrés Quintana Roo"'>CBTis 72 "Andrés Quintana Roo"</option>
+                        <option value='CEB 5/10 "Profr. Rafael Ramírez Castañeda"'>CEB 5/10 "Profr. Rafael Ramírez Castañeda"</option>
+                        <option value="Plantel Conalep Felipe Carrillo Puerto">Plantel Conalep Felipe Carrillo Puerto</option>
                         <option value="Otro">Otra institución / No pertenezco a estas escuelas</option>
                     </select>
                 </div>

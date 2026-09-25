@@ -970,3 +970,32 @@ html[data-theme="dark"] .chip-fase {
     width: 100%;
   }
 }
+/* Registro del juego en móvil: ventana compacta, no página completa. */
+@media (max-width: 560px) {
+  .dialogo-registro-juego {
+    width: calc(100% - 1rem);
+    max-height: calc(100% - 1rem);
+    margin: auto;
+    border-radius: 18px;
+  }
+
+  .registro-juego-contenido {
+    padding: 1.25rem 1rem 1rem;
+  }
+
+  .registro-juego-contenido h2 {
+    padding-right: 2rem;
+    font-size: 1.65rem;
+  }
+
+  .formulario-registro-juego {
+    gap: .8rem;
+    margin-top: 1rem;
+  }
+
+  .campo-registro-juego input,
+  .campo-registro-juego select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+}

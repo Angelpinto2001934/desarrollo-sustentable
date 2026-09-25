@@ -57,6 +57,12 @@ html[data-theme="dark"] {
   }
 }
 
+
+/* Respeta siempre el atributo HTML hidden, incluso si otra clase usa display:grid/flex. */
+[hidden] {
+  display: none !important;
+}
+
 * {
   box-sizing: border-box;
 }

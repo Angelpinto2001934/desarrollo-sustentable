@@ -393,6 +393,7 @@ function abrirRegistroJuego() {
   // El campo de actividad solo debe aparecer si se eligió "Otra institución".
   const esOtraInstitucion = escuelaRegistro.value === "Otro";
   campoActividad.hidden = !esOtraInstitucion;
+  campoActividad.style.display = esOtraInstitucion ? "grid" : "none";
   actividadRegistro.required = esOtraInstitucion;
   if (!esOtraInstitucion) actividadRegistro.value = "";
 
@@ -737,12 +738,16 @@ reintentar.addEventListener("click", () => {
 
 continuar.addEventListener("click", siguienteMision);
 
-escuelaRegistro.addEventListener("change", () => {
+function actualizarCampoActividadRegistro() {
   const esOtro = escuelaRegistro.value === "Otro";
   campoActividad.hidden = !esOtro;
+  campoActividad.style.display = esOtro ? "grid" : "none";
   actividadRegistro.required = esOtro;
   if (!esOtro) actividadRegistro.value = "";
-});
+}
+
+escuelaRegistro.addEventListener("change", actualizarCampoActividadRegistro);
+actualizarCampoActividadRegistro();
 
 cerrarRegistro.addEventListener("click", cerrarRegistroJuego);
 cancelarRegistro.addEventListener("click", cerrarRegistroJuego);
@@ -758,8 +763,11 @@ formularioRegistro.addEventListener("submit", async (evento) => {
   const escuelaLimpia = normalizar(escuelaRegistro.value);
   const actividadLimpia = normalizar(actividadRegistro.value);
 
-  if (nombreLimpio.length < 2) {
-    errorRegistro.textContent = "Escribe un nombre válido.";
+  const partesNombre = nombreLimpio.split(" ").filter(Boolean);
+  const palabraNombreValida = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ'-]{2,}$/u;
+
+  if (partesNombre.length !== 2 || !partesNombre.every((parte) => palabraNombreValida.test(parte))) {
+    errorRegistro.textContent = "Escribe solo tu nombre y un apellido. Ejemplo: Ana López.";
     nombreRegistro.focus();
     return;
   }

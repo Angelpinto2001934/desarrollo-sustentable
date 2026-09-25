@@ -1,56 +1,19 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-    <link href="https://images.unsplash.com" rel="preconnect" />
-    <link href="https://commons.wikimedia.org" rel="preconnect" />
-    <link href="https://thumb.wikimedia.org" rel="preconnect" />
-    <link href="https://upload.wikimedia.org" rel="preconnect" />
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="Registro de visita al sitio de Desarrollo Sustentable." name="description" />
-    <title>Registro para jugar | Desarrollo Sustentable</title>
-    <link href="CSS/general.css" rel="stylesheet" />
-    <link href="CSS/acceso.css" rel="stylesheet" />
-    <script src="JS/acceso.js" type="module"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=juego.html">
+  <title>Juego | Desarrollo Sustentable</title>
+  <link rel="stylesheet" href="CSS/general.css">
+  <script>
+    window.location.replace("juego.html");
+  </script>
 </head>
-
-<body class="pagina-acceso">
-    <main class="acceso-contenedor">
-        <section aria-labelledby="titulo-acceso" class="acceso-panel">
-            <div aria-hidden="true" class="marca-acceso"><img alt="Desarrollo Sustentable" class="logo-acceso"
-                    src="IMG/logo-desarrollo.png" /></div>
-            <p class="sobrelinea">Registro para jugar</p>
-            <h1 id="titulo-acceso">Antes de comenzar</h1>
-            <p>El sitio es público. Solo necesitamos estos datos si quieres participar en el juego y guardar tu resultado.</p>
-            <form class="formulario-acceso" id="formulario-visita" novalidate="">
-                <div class="campo">
-                    <label for="nombre">Nombre</label>
-                    <input autocomplete="name" id="nombre" maxlength="80" minlength="2" name="nombre"
-                        placeholder="Escribe tu nombre" required="" type="text" />
-                </div>
-                <div class="campo">
-                    <label for="escuela">Institución</label>
-                    <select id="escuela" name="escuela" required="">
-                        <option value="">Selecciona tu institución</option>
-                        <option value="CBTIS 72">CBTis 72 "Andrés Quintana Roo"</option>
-                        <option value="BACHILLER CEB510">CEB 5/10 Profr. Rafael Ramírez Castañeda</option>
-                        <option value="CONALEP">Plantel Conalep Felipe Carrillo Puerto</option>
-                        <option value="Otro">Otra institución / No pertenezco a estas escuelas</option>
-                    </select>
-                </div>
-                <div class="campo" id="campo-actividad" hidden><label for="actividad">¿A qué te dedicas?</label><input id="actividad" maxlength="100"
-                        placeholder="Ej. estudiante, docente, trabajador..." type="text" /></div>
-                <p aria-live="polite" class="mensaje-error" id="error-visita"></p>
-                <div class="acceso-acciones">
-                    <button class="boton" type="submit">Registrarme y jugar</button>
-                    <a class="boton-secundario" href="index.html">Volver al sitio</a>
-                </div>
-            </form>
-            <p class="aviso-privacidad">El nombre, la institución y, cuando corresponda, tu actividad se usarán únicamente para registrar tu participación y relacionarla con el resultado del juego.</p>
-        </section>
-    </main>
+<body>
+  <main style="width:min(92%,620px);margin:4rem auto;text-align:center;">
+    <p>Redirigiendo al juego…</p>
+    <a class="boton" href="juego.html">Ir al juego</a>
+  </main>
 </body>
-
 </html>
